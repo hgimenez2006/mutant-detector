@@ -1,0 +1,15 @@
+com\horacio\mutant\web\MutantResponse.class
+com\horacio\mutant\service\MutantDetector4Letters.class
+com\horacio\mutant\repository\DnaModel.class
+com\horacio\mutant\service\DetectionResult.class
+com\horacio\mutant\repository\DnaModel$DnaModelBuilder.class
+com\horacio\mutant\service\DnaService.class
+com\horacio\mutant\MutantHandler.class
+com\horacio\mutant\web\MutantRequest.class
+com\horacio\mutant\MutantDetectorApplication$Stats.class
+com\horacio\mutant\repository\DnaRepository.class
+com\horacio\mutant\service\MutantDetector4Letters$CharCount.class
+com\horacio\mutant\service\DnaIdBuilderSHA256.class
+com\horacio\mutant\service\DnaIdBuilder.class
+com\horacio\mutant\MutantDetectorApplication.class
+com\horacio\mutant\service\MutantDetector.class
