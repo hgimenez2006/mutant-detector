@@ -84,111 +84,22 @@ public class MutantDetector4Letters implements MutantDetector{
                     break;
                 }
 
-/*                if (horizontalMatches.charFound == currChar){
-                    //horizontalMatches++;
-                    horizontalMatches.count++;
-                    if (horizontalMatches.count == 4) {
-                        sequenceCount++;
-                        if (sequenceCount==2){
-                            break;
-                        }
-                        //horizontalMatches=1;
-                        horizontalMatches.reset();
-                    }
-                }
-                else{
-                    horizontalMatches.reset();
-                }
-                horizontalMatches.charFound = currChar;*/
-
-                /*if (prevChar==currChar) {
-                    horizontalMatches++;
-                    if (horizontalMatches == 4) {
-                        sequenceCount++;
-                        if (sequenceCount==2){
-                            break;
-                        }
-                        horizontalMatches=1;
-                        prevChar=' ';
-                    }
-                }
-                else{
-                    horizontalMatches=1;
-                }
-                prevChar = currChar;*/
-
                 sequenceCount = verifyVertical(verticalMatches, colIndex, currChar, sequenceCount);
                 if (isSequenceCountReached(sequenceCount)){
                     break;
                 }
 
-                /*CharCount verticalCount = verticalMatches.get(colIndex);
-                if (verticalCount != null){
-                    if (verticalCount.charFound == currChar) {
-                        verticalCount.count++;
-                        if (verticalCount.count == 4) {
-                            sequenceCount++;
-                            if (sequenceCount==2) {
-                                break;
-                            }
-                            verticalCount.reset();
-                        }
-                    }
-                }else{
-                    verticalCount = new CharCount();
-                }
-                verticalCount.charFound = currChar;
-                verticalMatches.put(colIndex, verticalCount);*/
-
                 sequenceCount = verifyDiagonal(diagonal1MatchesPrevRow, diagonal1MatchesCurrRow, colIndex,
                         currChar, sequenceCount, true);
-                if (sequenceCount==mutantSequenceCount) {
+                if (isSequenceCountReached(sequenceCount)) {
                     break;
                 }
-                /*CharCount diagonal1Count = diagonal1MatchesPrevRow.get(colIndex-1);
-                if (diagonal1Count != null){
-                    if (diagonal1Count.charFound == currChar) {
-                        diagonal1Count.count++;
-                        if (diagonal1Count.count == 4) {
-                            sequenceCount++;
-                            if (sequenceCount==2) {
-                                break;
-                            }
-                            diagonal1Count.reset();
-                        }
-                    }
-                }
-                else{
-                    diagonal1Count = new CharCount();
-                }
-                diagonal1Count.charFound = currChar;
-                diagonal1MatchesCurrRow.put(colIndex, diagonal1Count);*/
 
                 sequenceCount = verifyDiagonal(diagonal2MatchesPrevRow, diagonal2MatchesCurrRow, colIndex,
                         currChar, sequenceCount, false);
                 if (isSequenceCountReached(sequenceCount)){
                     break;
                 }
-                /*
-                CharCount diagonal2Count = diagonal2MatchesPrevRow.get(colIndex+1);
-                if (diagonal2Count != null){
-                    if (diagonal2Count.charFound == currChar) {
-                        diagonal2Count.count++;
-                        if (diagonal2Count.count == 4) {
-                            sequenceCount++;
-                            if (sequenceCount==2) {
-                                break;
-                            }
-                            diagonal2Count.reset();
-                        }
-                    }
-                }
-                else{
-                    diagonal2Count = new CharCount();
-                    //diagonal2Count.count = 1;
-                }
-                diagonal2Count.charFound = currChar;
-                diagonal2MatchesCurrRow.put(colIndex, diagonal2Count);*/
             }
 
             diagonal1MatchesPrevRow = diagonal1MatchesCurrRow;

@@ -1,8 +1,28 @@
+import ch.qos.logback.classic.BasicConfigurator;
+import com.google.gson.Gson;
+import com.horacio.mutant.service.DnaIdBuilderSHA256;
 import com.horacio.mutant.service.MutantDetector4Letters;
+import com.horacio.mutant.web.MutantRequest;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import lombok.Builder;
+import org.apache.commons.lang3.StringUtils;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.web.client.HttpClientErrorException;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MyTest {
@@ -13,10 +33,67 @@ public class MyTest {
         return mutantDetector.detectMutant(dna).isMutant();
     }
 
+    private static final String mongoUri = "mongodb+srv://horacio:mutantes2000@cluster0.7pfzt.mongodb.net/test?retryWrites=true&w=majority";
+
+    @Test
+    public void loadDataIntoMongo() throws IOException {
+        MongoClient client = MongoClients.create(mongoUri);
+        MongoDatabase database = client.getDatabase("dna");
+        MongoCollection<Document> dna = database.getCollection("dna");
+
+        boolean isMutant=false;
+        for (int i=0; i<100; i++) {
+            if (isMutant)
+                isMutant=false;
+            else
+                isMutant=true;
+
+            String dnaStr = createDna();
+            String key = new DnaIdBuilderSHA256().buildId(dnaStr);
+
+            Document document = new Document("_id", new ObjectId());
+            document.append("_id", key);
+            document.append("dna", dnaStr);
+            document.append("mutant", isMutant);
+            document.append("_class", "com.horacio.mutant.repository.DnaModel");
+            dna.insertOne(document);
+
+            System.out.println(i);
+        }
+    }
+
+    @Test
+    public void testMongo(){
+        MongoClient client = MongoClients.create(mongoUri);
+        MongoDatabase database = client.getDatabase("dna");
+        MongoCollection<Document> dna = database.getCollection("dna");
+        System.out.println(dna.countDocuments());
+    }
+
+    @Test
+    public void testDAta() throws IOException {
+
+        Path path = Paths.get("request.txt");
+        Files.delete(path);
+        //Files.write(path, (new Gson().toJson(request)).getBytes());
+
+        //System.out.println(new Gson().toJson(request));
+    }
+
+    private String createDna(){
+        int size = 1000;
+        StringBuilder str = new StringBuilder();
+
+        for (int i=0; i<size; i++){
+            str.append(RandomStringUtils.randomAlphabetic(size).toUpperCase());
+        }
+
+        return str.toString();
+    }
+
     @Test
     public void test1() {
         // APACHE commons
-        //String generatedString = RandomStringUtils.randomAlphabetic(10);
         // uno en horizontal, uno en vertical
         String[] dna = new String[5];
         dna[0] = "AAAAAA";

@@ -2,6 +2,7 @@ package com.horacio.mutant;
 
 import com.horacio.mutant.service.DetectionResult;
 import com.horacio.mutant.service.DnaService;
+import com.horacio.mutant.service.Stats;
 import com.horacio.mutant.web.MutantRequest;
 import com.horacio.mutant.web.MutantResponse;
 import lombok.Data;
@@ -50,27 +51,21 @@ public class MutantDetectorApplication {
     }*/
 
     @Bean
-    public Function<MutantRequest,String> mutant(){
+    public Function<MutantRequest,MutantResponse> mutant(){
         return request -> {
                 DetectionResult result = dnaService.detectMutantAndSave(request.getDna());
                 if (!result.isMutant()){
                     throw new RuntimeException("Human detected");
                 }
-                return "Mutante";
+                return result;
             };
     }
 
-    /*@Bean
+    //TODO: ver porque con este bean el webserver queda levantado y con el otro no
+   /* @Bean
     public Supplier<Stats> stats(){
-        return () -> new Stats();
+        return () -> dnaService.getStats();
     }*/
-
-    @Data
-    public static class Stats{
-        int count_mutant_dna = 40;
-        int count_human_dna = 100;
-        double ration = 0.4;
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(MutantDetectorApplication.class, args);

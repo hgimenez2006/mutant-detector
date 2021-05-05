@@ -1,9 +1,10 @@
 package com.horacio.mutant.service;
 
+import com.horacio.mutant.web.MutantResponse;
 import lombok.Data;
 
 @Data
-public class DetectionResult {
+public class DetectionResult extends MutantResponse {
     private boolean mutant;
     private String dna;
 

@@ -6,5 +6,6 @@ import lombok.Data;
 public class MutantResponse {
     private long createKeyMs;
     private long saveDnaMs;
+    private long insertDnaMs;
     private long detectMutantMs;
 }
