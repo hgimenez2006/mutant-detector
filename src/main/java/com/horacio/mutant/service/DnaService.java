@@ -4,8 +4,11 @@ import com.google.common.base.Stopwatch;
 import com.google.common.hash.Hashing;
 import com.horacio.mutant.repository.DnaModel;
 import com.horacio.mutant.repository.HumanModel;
+import com.horacio.mutant.repository.MongoRepository;
 import com.horacio.mutant.repository.MutantModel;
+import com.mongodb.client.MongoDatabase;
 import lombok.extern.log4j.Log4j2;
+import org.bson.Document;
 
 //@Log4j2
 public class DnaService {
@@ -16,26 +19,29 @@ public class DnaService {
     //@Inject
     private DnaIdBuilder dnaIdBuilder = new DnaIdBuilderSHA256();
 
+    private MongoRepository mongoRepository;
     //TODO: save db credentials in aws secrets
+    public DnaService(MongoRepository mongoRepository){
+        this.mongoRepository = mongoRepository;
+    }
+
     public DetectionResult detectMutantAndSave(String[] dna){
         DetectionResult result = mutantDetector.detectMutant(dna);
         String dnaId = dnaIdBuilder.buildId(result.getDna());
 
         try{
+            long start = System.currentTimeMillis();
+
             if (result.isMutant()) {
-                MutantModel mutantModel = MutantModel.builder()
-                        .id(dnaId)
-                        .dna(result.getDna())
-                        .build();
-//                mutantRepository.insert(mutantModel);
+                mongoRepository.insertMutant(dnaId, result.getDna());
             }
             else{
-                HumanModel humanModel = HumanModel.builder()
-                        .id(dnaId)
-                        .dna(result.getDna())
-                        .build();
-  //              humanRepository.insert(humanModel);
+                mongoRepository.insertHuman(dnaId, result.getDna());
             }
+
+            long end = System.currentTimeMillis();
+            result.setInsertDnaMs(end-start);
+
         } catch(Exception e){
         }
 
@@ -43,11 +49,11 @@ public class DnaService {
     }
 
     public Stats getStats(){
-/*        long humanCount = humanRepository.count();
-        long mutantCount = mutantRepository.count();
-*/
+        long humanCount = mongoRepository.getHumanCount();
+        long mutantCount = mongoRepository.getMutantCount();
+
         Stats stats = new Stats();
-  /*      stats.setCount_human_dna(humanCount);
+        stats.setCount_human_dna(humanCount);
         stats.setCount_mutant_dna(mutantCount);
 
         double ratio = mutantCount;
@@ -55,9 +61,7 @@ public class DnaService {
             ratio = mutantCount / humanCount;
         }
         stats.setRatio(ratio);
-*/
-        stats.setCount_human_dna(10);
-        stats.setCount_mutant_dna(5);
+
         return stats;
     }
 }
