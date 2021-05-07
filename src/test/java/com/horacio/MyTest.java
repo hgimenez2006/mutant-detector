@@ -38,7 +38,7 @@ public class MyTest {
         System.out.println(mongoCollection.count());
     }
 
-    @Test
+    //@Test
     public void doit(){
         S3Repository.uploadFile("mutant-bucket","kaos", "kimba");
     }

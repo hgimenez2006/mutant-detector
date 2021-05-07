@@ -36,12 +36,15 @@ public class DnaService {
             long start = System.currentTimeMillis();
 
             if (result.isMutant()) {
-                mongoRepository.insertMutant(dnaId, result.getDna());
-                //S3Repository.uploadFile("mutant-bucket", dnaId, result.getDna());
+                //mongoRepository.insertMutant(dnaId, result.getDna());
+                //TODO: check if the file already exists in s3
+                //TODO: ver la mejor manera de crear una key para optimizar, de eso depende
+                // creo el maximo de concurrencia
+                S3Repository.uploadFile("mutant-bucket", dnaId, result.getDna());
             }
             else{
-                mongoRepository.insertHuman(dnaId, result.getDna());
-                //S3Repository.uploadFile("human-bucket", dnaId, result.getDna());
+                //mongoRepository.insertHuman(dnaId, result.getDna());
+                S3Repository.uploadFile("human-bucket", dnaId, result.getDna());
             }
 
             long end = System.currentTimeMillis();

@@ -9,14 +9,17 @@ import com.horacio.mutant.repository.MongoRepository;
 import com.horacio.mutant.service.DetectionResult;
 import com.horacio.mutant.service.DnaService;
 import com.horacio.mutant.web.MutantRequest;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+@Log4j2
 public class MutantLambda implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent, Context context) { Gson gson = new Gson();
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         MutantRequest mutantRequest;
+        log.info("ejecutando el choripan");
         try{
             if (StringUtils.isBlank(apiGatewayProxyRequestEvent.getBody())){
                 response.setStatusCode(404);
@@ -32,7 +35,7 @@ public class MutantLambda implements RequestHandler<APIGatewayProxyRequestEvent,
             response.setBody(new Gson().toJson(result));
 
         }catch(Exception e){
-            e.printStackTrace();
+            log.error(e);
             response.setStatusCode(502);
             //response.setBody(ExceptionUtils.getStackTrace(e));
             response.setBody("Mi error: " + e.getMessage());
