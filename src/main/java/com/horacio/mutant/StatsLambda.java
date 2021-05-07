@@ -14,14 +14,13 @@ import com.horacio.mutant.web.MutantResponse;
 import javax.inject.Inject;
 
 public class StatsLambda implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-    private MongoRepository mongoRepository = new MongoRepository();
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent, Context context) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         response.setStatusCode(200);
 
-        DnaService dnaService = new DnaService(mongoRepository);
+        DnaService dnaService = new DnaService();
         Stats stats  = dnaService.getStats();
         response.setBody(new Gson().toJson(stats));
         return response;

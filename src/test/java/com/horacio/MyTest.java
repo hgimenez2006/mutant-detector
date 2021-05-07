@@ -1,5 +1,6 @@
 package com.horacio;
 
+import com.horacio.mutant.s3.S3Repository;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
@@ -13,7 +14,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 public class MyTest {
-    @Test
+    //@Test
     public void go(){
         MongoCredential credential = MongoCredential.createCredential("horacio", "dna",
                 "mustantes2000".toCharArray());
@@ -35,5 +36,10 @@ public class MyTest {
 
         mongoCollection = mongoDatabase.getCollection("human");
         System.out.println(mongoCollection.count());
+    }
+
+    @Test
+    public void doit(){
+        S3Repository.uploadFile("mutant-bucket","kaos", "kimba");
     }
 }
