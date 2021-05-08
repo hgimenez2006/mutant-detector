@@ -19,7 +19,7 @@ public class MutantLambda implements RequestHandler<APIGatewayProxyRequestEvent,
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent, Context context) { Gson gson = new Gson();
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         MutantRequest mutantRequest;
-        log.info("ejecutando el choripan");
+        //log.info("ejecutando el choripan");
         try{
             if (StringUtils.isBlank(apiGatewayProxyRequestEvent.getBody())){
                 response.setStatusCode(404);
@@ -35,7 +35,7 @@ public class MutantLambda implements RequestHandler<APIGatewayProxyRequestEvent,
             response.setBody(new Gson().toJson(result));
 
         }catch(Exception e){
-            log.error(e);
+            //log.error(e);
             response.setStatusCode(502);
             //response.setBody(ExceptionUtils.getStackTrace(e));
             response.setBody("Mi error: " + e.getMessage());

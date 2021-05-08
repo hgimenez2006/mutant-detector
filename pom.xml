@@ -156,7 +156,7 @@
                         </configuration>
                     </execution>
                 </executions>
-                </plugin>-->
+                </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -170,7 +170,7 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
