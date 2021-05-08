@@ -19,6 +19,10 @@ import lombok.extern.log4j.Log4j2;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Lambda invoked from s3 bucket
+ */
+@Deprecated
 @Log4j2
 public class S3Lambda implements RequestHandler<S3Event, String> {
     private MongoRepository mongoRepository = new MongoRepository();
