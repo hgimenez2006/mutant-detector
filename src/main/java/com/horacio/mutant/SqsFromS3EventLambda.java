@@ -31,7 +31,8 @@ import java.util.Optional;
  *
  */
 @Log4j2
-public class SqsLambda implements RequestHandler<SQSEvent, Void> {
+@Deprecated
+public class SqsFromS3EventLambda implements RequestHandler<SQSEvent, Void> {
     private MongoRepository mongoRepository = new MongoRepository();
 
     @Override

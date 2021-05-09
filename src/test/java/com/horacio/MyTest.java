@@ -40,6 +40,6 @@ public class MyTest {
 
     //@Test
     public void doit(){
-        S3Repository.uploadFile("mutant-bucket","kaos", "kimba");
+        new S3Repository().uploadFile("mutant-bucket","kaos", "kimba");
     }
 }

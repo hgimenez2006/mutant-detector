@@ -1,7 +1,5 @@
 package com.horacio.mutant.service;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +18,7 @@ public class MutantDetector4Letters implements MutantDetector{
     }
 
     @Override
-    public DetectionResult detectMutant(String[] dna) {
+    public DnaResult detectMutant(String[] dna) {
         validateDna(dna);
         return analyzeDna(dna);
     }
@@ -47,7 +45,7 @@ public class MutantDetector4Letters implements MutantDetector{
         }
     }*/
 
-    private DetectionResult analyzeDna(String[] dna){
+    private DnaResult analyzeDna(String[] dna){
 
         //TODO enable/disble logging
         //log.debug("Analyzind Dna");
@@ -107,7 +105,7 @@ public class MutantDetector4Letters implements MutantDetector{
 
         //TODO improve this
         String completeDna = String.join("", dna);
-        return new DetectionResult(sequenceCount==2, completeDna);
+        return new DnaResult(sequenceCount==2, completeDna);
     }
 
     private boolean isSequenceCountReached(int sequenceCount){
