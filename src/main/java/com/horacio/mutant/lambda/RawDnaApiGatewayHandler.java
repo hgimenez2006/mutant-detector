@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 @Log4j2
 public class RawDnaApiGatewayHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+    private DnaService dnaService = new DnaService();
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent, Context context) { Gson gson = new Gson();
@@ -26,7 +27,6 @@ public class RawDnaApiGatewayHandler implements RequestHandler<APIGatewayProxyRe
             }
             mutantRequest = gson.fromJson(apiGatewayProxyRequestEvent.getBody(), DnaRequest.class);
             String[] dnaRequest = mutantRequest.getDna();
-            DnaService dnaService = new DnaService();
             DnaResult result  = dnaService.analyzeDnaAndSendResult(dnaRequest);
 
             int statusCode = result.isMutant() ? 200 : 203;
