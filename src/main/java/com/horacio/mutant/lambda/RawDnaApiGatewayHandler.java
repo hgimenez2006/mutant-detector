@@ -7,7 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.horacio.mutant.service.DnaResult;
 import com.horacio.mutant.service.DnaService;
-import com.horacio.mutant.web.MutantRequest;
+import com.horacio.mutant.web.DnaRequest;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,14 +17,14 @@ public class RawDnaApiGatewayHandler implements RequestHandler<APIGatewayProxyRe
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent, Context context) { Gson gson = new Gson();
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-        MutantRequest mutantRequest;
+        DnaRequest mutantRequest;
         System.out.println("request received: " + apiGatewayProxyRequestEvent.getBody());
         try{
             if (StringUtils.isBlank(apiGatewayProxyRequestEvent.getBody())){
                 response.setStatusCode(404);
                 return response;
             }
-            mutantRequest = gson.fromJson(apiGatewayProxyRequestEvent.getBody(), MutantRequest.class);
+            mutantRequest = gson.fromJson(apiGatewayProxyRequestEvent.getBody(), DnaRequest.class);
             String[] dnaRequest = mutantRequest.getDna();
             DnaService dnaService = new DnaService();
             DnaResult result  = dnaService.analyzeDnaAndSendResult(dnaRequest);

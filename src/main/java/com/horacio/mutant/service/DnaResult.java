@@ -1,6 +1,5 @@
 package com.horacio.mutant.service;
 
-import com.horacio.mutant.web.MutantResponse;
 import lombok.Data;
 
 @Data
