@@ -22,7 +22,7 @@ import java.io.InputStream;
  */
 @Deprecated
 public class S3Lambda implements RequestHandler<S3Event, String> {
-    private MongoDnaRepository mongoDnaRepository = new MongoDnaRepository();
+    private MongoDnaRepository mongoDnaRepository = new MongoDnaRepository(new DnaKeyBuilderSHA256());
 
     @Override
     public String handleRequest(S3Event s3event, Context context) {

@@ -7,12 +7,14 @@ import com.horacio.mutant.s3.S3Repository;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.inject.Inject;
 import java.io.IOException;
 
 public class AnalyzedDnaService {
     private final DnaRepository dnaRepository;
     private final S3Repository s3Repository;
 
+    @Inject
     public AnalyzedDnaService(final DnaRepository dnaRepository,
                               final S3Repository s3Repository){
         this.dnaRepository = dnaRepository;

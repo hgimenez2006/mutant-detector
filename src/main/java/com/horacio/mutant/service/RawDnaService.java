@@ -1,10 +1,13 @@
 package com.horacio.mutant.service;
 
+import javax.inject.Inject;
+
 //@Log4j2
 public class RawDnaService {
     private final MutantDetector mutantDetector;
     private final AnalyzedDnaSender analyzedDnaSender;
 
+    @Inject
     public RawDnaService(final AnalyzedDnaSender analyzedDnaSender,
                          final MutantDetector mutantDetector){
         this.analyzedDnaSender = analyzedDnaSender;

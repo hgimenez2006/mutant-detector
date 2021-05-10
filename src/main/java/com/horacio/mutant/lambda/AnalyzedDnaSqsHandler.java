@@ -5,9 +5,9 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.google.gson.Gson;
-import com.horacio.mutant.repository.DnaRepository;
-import com.horacio.mutant.repository.MongoDnaRepository;
-import com.horacio.mutant.s3.S3Repository;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.horacio.mutant.guice.AnalyzedDnaModule;
 import com.horacio.mutant.service.AnalyzedDnaService;
 
 import java.io.IOException;
@@ -15,9 +15,8 @@ import java.io.IOException;
 public class AnalyzedDnaSqsHandler implements RequestHandler<SQSEvent, Void> {
     public final static String SQS_MSG_BUCKET_NAME = "s3BucketName";
 
-    private DnaRepository dnaRepository = new MongoDnaRepository();
-    private S3Repository s3Repository = new S3Repository();
-    private AnalyzedDnaService analyzedDnaService = new AnalyzedDnaService(dnaRepository, s3Repository);
+    private Injector injector = Guice.createInjector(new AnalyzedDnaModule());
+    private AnalyzedDnaService analyzedDnaService = injector.getInstance(AnalyzedDnaService.class);
 
     @Override
     public Void handleRequest(SQSEvent sqsEvent, Context context) {

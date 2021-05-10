@@ -8,21 +8,24 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
+import javax.inject.Inject;
 import java.util.Date;
 
 public class MongoDnaRepository implements DnaRepository{
-    // String url = "mongodb+srv://horacio:mutantes2000@cluster0.7pfzt.mongodb.net/test?retryWrites=true&w=majority";
-    private MongoDatabase mongoDatabase;
-    private final DnaKeyBuilder dnaKeyBuilder = new DnaKeyBuilderSHA256();
+    private static String DEFAULT_URL = "mongodb+srv://horacio:mutantes2000@cluster0.7pfzt.mongodb.net/test?retryWrites=true&w=majority";
+    private static final String DEFAULT_DB_NAME = "dna";
 
-    public MongoDnaRepository() {
-        String url = Environment.getInstance().get(Environment.Variable.DB_URL,
-                "mongodb+srv://horacio:mutantes2000@cluster0.7pfzt.mongodb.net/test?retryWrites=true&w=majority");
-        String dbName = Environment.getInstance().get(Environment.Variable.DB_NAME, "dna");
+    private MongoDatabase mongoDatabase;
+    private final DnaKeyBuilder dnaKeyBuilder; // = new DnaKeyBuilderSHA256();
+
+    @Inject
+    public MongoDnaRepository(final DnaKeyBuilder dnaKeyBuilder) {
+        this.dnaKeyBuilder = dnaKeyBuilder;
+        String url = Environment.getInstance().get(Environment.Variable.DB_URL, DEFAULT_URL);
+        String dbName = Environment.getInstance().get(Environment.Variable.DB_NAME, DEFAULT_DB_NAME);
 
         MongoClientURI uri = new MongoClientURI(url);
         MongoClient mongoClient = new MongoClient(uri);
-        //mongoDatabase = mongoClient.getDatabase("dna");
         mongoDatabase = mongoClient.getDatabase(dbName);
     }
 

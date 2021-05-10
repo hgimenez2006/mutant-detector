@@ -17,11 +17,17 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
         <wrapper.version>1.0.17.RELEASE</wrapper.version>
+        <guice.version>4.1.0</guice.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <!--<dependency>
             <groupId>org.slf4j</groupId>

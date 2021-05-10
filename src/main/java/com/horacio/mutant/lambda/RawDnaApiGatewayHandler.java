@@ -1,29 +1,29 @@
 package com.horacio.mutant.lambda;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
-import com.horacio.mutant.service.AnalyzedDnaSender;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.horacio.mutant.guice.RawDnaModule;
 import com.horacio.mutant.service.DnaResult;
-import com.horacio.mutant.service.MutantDetector;
-import com.horacio.mutant.service.SimpleMutantDetector;
 import com.horacio.mutant.service.RawDnaService;
-import com.horacio.mutant.sqs.AnalyzedDnaSqsSender;
 import com.horacio.mutant.web.DnaRequest;
 import org.apache.commons.lang3.StringUtils;
 
 public class RawDnaApiGatewayHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-    private MutantDetector mutantDetector = new SimpleMutantDetector();
-    private AnalyzedDnaSender analyzedDnaSender = new AnalyzedDnaSqsSender();
-    private RawDnaService rawDnaService = new RawDnaService(analyzedDnaSender, mutantDetector);
+    private Injector injector = Guice.createInjector(new RawDnaModule());
+    private RawDnaService rawDnaService = injector.getInstance(RawDnaService.class);
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent, Context context) { Gson gson = new Gson();
+        LambdaLogger logger = context.getLogger();
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         DnaRequest mutantRequest;
-        System.out.println("request received: " + apiGatewayProxyRequestEvent.getBody());
+        logger.log("request received: " + apiGatewayProxyRequestEvent.getBody());
         try{
             if (StringUtils.isBlank(apiGatewayProxyRequestEvent.getBody())){
                 response.setStatusCode(404);

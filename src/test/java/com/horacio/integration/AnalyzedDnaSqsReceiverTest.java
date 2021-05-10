@@ -5,6 +5,7 @@ import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.DeleteMessageRequest;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
+import com.horacio.mutant.repository.DnaKeyBuilderSHA256;
 import com.horacio.mutant.repository.MongoDnaRepository;
 import com.horacio.mutant.s3.S3Repository;
 import com.horacio.mutant.service.AnalyzedDnaService;
@@ -27,7 +28,7 @@ public class AnalyzedDnaSqsReceiverTest extends IntegrationTestBase{
 
     @Before
     public void init() {
-        mongoDnaRepository = new MongoDnaRepository();
+        mongoDnaRepository = new MongoDnaRepository(new DnaKeyBuilderSHA256());
         s3Repository = new S3Repository();
         analyzedDnaService = new AnalyzedDnaService(mongoDnaRepository, s3Repository);
     }

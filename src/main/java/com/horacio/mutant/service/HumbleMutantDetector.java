@@ -7,25 +7,19 @@ import com.horacio.mutant.Environment;
 import org.apache.commons.lang3.StringUtils;
 
 //@Log4j2
-public class SimpleMutantDetector implements MutantDetector{
-    private int mutantSequenceSize = 4;
-    private int mutantSequenceCount = 2;
+public class HumbleMutantDetector implements MutantDetector{
+    private int mutantSequenceSize;
+    private int mutantSequenceCount;
 
-    public SimpleMutantDetector(){
+    public HumbleMutantDetector(){
         String mutantChar = Environment.getInstance().get(Environment.Variable.MUTANT_CHAR, "4");
         String mutantSequence = Environment.getInstance().get(Environment.Variable.MUTANT_SEQUENCE, "2");
-
         try{
            this.mutantSequenceSize = Integer.valueOf(mutantChar);
+           this.mutantSequenceCount = Integer.valueOf(mutantSequence);
         }catch(NumberFormatException e){
-            System.out.println(e);
+            new RuntimeException(e);
         }
-        try{
-            this.mutantSequenceCount = Integer.valueOf(mutantSequence);
-        }catch(NumberFormatException e){
-            System.out.println(e);
-        }
-
     }
 
     @Override

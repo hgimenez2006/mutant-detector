@@ -1,5 +1,11 @@
 package com.horacio;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.horacio.mutant.guice.AnalyzedDnaModule;
+import com.horacio.mutant.guice.RawDnaModule;
+import com.horacio.mutant.service.AnalyzedDnaService;
+import com.horacio.mutant.service.RawDnaService;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
@@ -7,9 +13,18 @@ import com.mongodb.MongoCredential;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.junit.Test;
 
 public class MyTest {
 
+    @Test
+    public void testModules(){
+        Injector injector = Guice.createInjector(new AnalyzedDnaModule());
+        AnalyzedDnaService analyzedDnaService = injector.getInstance(AnalyzedDnaService.class);
+
+        injector = Guice.createInjector(new RawDnaModule());
+        RawDnaService rawDnaService = injector.getInstance(RawDnaService.class);
+    }
     //@Test
     public void go(){
         MongoCredential credential = MongoCredential.createCredential("horacio", "dna",
