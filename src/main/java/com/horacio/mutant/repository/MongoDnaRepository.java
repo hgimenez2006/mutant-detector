@@ -41,7 +41,9 @@ public class MongoDnaRepository implements DnaRepository{
             } else {
                 mongoDatabase.getCollection("human").insertOne(document);
             }
-        }catch(DuplicateKeyException e){
+            //TODO: check this
+        //}catch(DuplicateKeyException e){
+        }catch(Exception e){
             // Do nothing
         }
     }
