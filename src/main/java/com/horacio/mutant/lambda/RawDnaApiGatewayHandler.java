@@ -8,41 +8,45 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.horacio.mutant.exception.InvalidDnaException;
 import com.horacio.mutant.guice.RawDnaModule;
 import com.horacio.mutant.service.DnaResult;
 import com.horacio.mutant.service.RawDnaService;
 import com.horacio.mutant.web.DnaRequest;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpStatus;
 
 public class RawDnaApiGatewayHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
     private Injector injector = Guice.createInjector(new RawDnaModule());
     private RawDnaService rawDnaService = injector.getInstance(RawDnaService.class);
 
     @Override
-    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent, Context context) { Gson gson = new Gson();
+    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent,
+                                                      Context context) {
         LambdaLogger logger = context.getLogger();
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-        DnaRequest mutantRequest;
-        logger.log("request received: " + apiGatewayProxyRequestEvent.getBody());
-        try{
-            if (StringUtils.isBlank(apiGatewayProxyRequestEvent.getBody())){
-                response.setStatusCode(404);
-                return response;
-            }
-            mutantRequest = gson.fromJson(apiGatewayProxyRequestEvent.getBody(), DnaRequest.class);
-            String[] dnaRequest = mutantRequest.getDna();
-            DnaResult result  = rawDnaService.analyzeDnaAndSendResult(dnaRequest);
 
-            int statusCode = result.isMutant() ? 200 : 203;
-            response.setStatusCode(statusCode);
-            response.setBody(new Gson().toJson(result));
+        try {
+            DnaResult result = handleRequestPlease(apiGatewayProxyRequestEvent.getBody());
+            response.setStatusCode(result.isMutant() ? HttpStatus.SC_OK : HttpStatus.SC_FORBIDDEN);
+            response.setBody(result.isMutant() ? "ADN mutante" : "ADN humano");
+        } catch (InvalidDnaException e) {
+            logger.log("Returing BAD_REQUEST :" + e.getMessage());
+            response.setStatusCode(HttpStatus.SC_BAD_REQUEST);
+        }
+        return response;
+    }
 
-        }catch(Exception e){
-            System.out.println(e);
-            response.setStatusCode(502);
-            response.setBody("Mi error: " + e.getMessage());
+    private DnaResult handleRequestPlease(String requestBody) throws InvalidDnaException {
+        if (StringUtils.isBlank(requestBody)){
+            throw new InvalidDnaException("Request body is empty");
         }
 
-        return response;
+        DnaRequest mutantRequest = new Gson().fromJson(requestBody, DnaRequest.class);
+        if (mutantRequest == null){
+            throw new InvalidDnaException("Request format is invalid");
+        }
+
+        return rawDnaService.analyzeDnaAndSendResult(mutantRequest.getDna());
     }
 }

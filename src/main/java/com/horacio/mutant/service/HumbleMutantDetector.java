@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.horacio.mutant.Environment;
+import com.horacio.mutant.exception.InvalidDnaException;
 import org.apache.commons.lang3.StringUtils;
 
 //@Log4j2
@@ -23,14 +24,14 @@ public class HumbleMutantDetector implements MutantDetector{
     }
 
     @Override
-    public DnaResult detectMutant(String[] dna) {
+    public DnaResult detectMutant(String[] dna) throws InvalidDnaException {
         validateDna(dna);
         return analyzeDna(dna);
     }
 
-    private void validateDna(String[] dna){
+    private void validateDna(String[] dna) throws InvalidDnaException {
         if (dna==null || dna.length == 0){
-            throw new IllegalArgumentException("dna is null or empty");
+            throw new InvalidDnaException("dna is null or empty");
         }
     }
 
