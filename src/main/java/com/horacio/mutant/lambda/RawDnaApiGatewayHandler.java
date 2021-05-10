@@ -12,10 +12,8 @@ import com.horacio.mutant.service.SimpleMutantDetector;
 import com.horacio.mutant.service.RawDnaService;
 import com.horacio.mutant.sqs.AnalyzedDnaSqsSender;
 import com.horacio.mutant.web.DnaRequest;
-import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
-@Log4j2
 public class RawDnaApiGatewayHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
     private MutantDetector mutantDetector = new SimpleMutantDetector();
     private AnalyzedDnaSender analyzedDnaSender = new AnalyzedDnaSqsSender();

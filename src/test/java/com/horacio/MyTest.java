@@ -1,19 +1,15 @@
 package com.horacio;
 
-import com.horacio.mutant.s3.S3Repository;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import org.junit.Test;
-
-import java.util.Arrays;
 
 public class MyTest {
+
     //@Test
     public void go(){
         MongoCredential credential = MongoCredential.createCredential("horacio", "dna",

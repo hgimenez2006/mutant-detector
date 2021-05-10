@@ -26,15 +26,13 @@ import java.util.List;
  * client --> mutant-dagger --> s3 --> sqs --> SqsLambda --> mongoDB
  *
  */
-@Log4j2
+//@Log4j2
 @Deprecated
 public class SqsFromS3EventLambda implements RequestHandler<SQSEvent, Void> {
     private MongoDnaRepository mongoDnaRepository;
 
     @Override
     public Void handleRequest(SQSEvent sqsEvent, Context context) {
-//    public String handleRequest(S3Event s3event, Context context) {
-        log.info("processing s3 event");
         sqsEvent.getRecords().stream().forEach(sqsMessage -> {
             handleMessage(sqsMessage);
         });

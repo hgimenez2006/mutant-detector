@@ -21,17 +21,14 @@ import java.io.InputStream;
  * Lambda invoked from s3 bucket
  */
 @Deprecated
-@Log4j2
 public class S3Lambda implements RequestHandler<S3Event, String> {
     private MongoDnaRepository mongoDnaRepository = new MongoDnaRepository();
 
     @Override
     public String handleRequest(S3Event s3event, Context context) {
-        log.info("processing s3 event");
         S3EventNotification.S3EventNotificationRecord record = s3event.getRecords().get(0);
 
         String srcBucket = record.getS3().getBucket().getName();
-        log.info("bucket=" + srcBucket);
         // Object key may have spaces or unicode non-ASCII characters.
         String srcKey = record.getS3().getObject().getUrlDecodedKey();
 
@@ -52,13 +49,10 @@ public class S3Lambda implements RequestHandler<S3Event, String> {
               //  mongoRepository.insertHuman(id, dna);
             }
 
-            log.info("deleting object");
             DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(srcBucket, srcKey);
             s3Client.deleteObject(deleteObjectRequest);
-            log.info("object deleted");
 
         } catch (IOException e) {
-            log.error(e);
         }
         return null;
     }

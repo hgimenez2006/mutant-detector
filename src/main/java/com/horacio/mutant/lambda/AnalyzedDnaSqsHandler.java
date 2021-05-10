@@ -1,8 +1,10 @@
 package com.horacio.mutant.lambda;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
+import com.google.gson.Gson;
 import com.horacio.mutant.repository.DnaRepository;
 import com.horacio.mutant.repository.MongoDnaRepository;
 import com.horacio.mutant.s3.S3Repository;
@@ -19,7 +21,9 @@ public class AnalyzedDnaSqsHandler implements RequestHandler<SQSEvent, Void> {
 
     @Override
     public Void handleRequest(SQSEvent sqsEvent, Context context) {
-        System.out.println("requeste received");
+        LambdaLogger logger = context.getLogger();
+        logger.log("ENVIRONMENT VARIABLES: " + new Gson().toJson(System.getenv()));
+
         sqsEvent.getRecords().stream().forEach(sqsMessage -> {
             try {
                 handleMessage(sqsMessage);
