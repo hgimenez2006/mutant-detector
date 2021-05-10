@@ -1,30 +1,35 @@
 package com.horacio.mutant.s3;
 
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.S3Object;
+import com.horacio.mutant.util.AwsRegionUtil;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 public class S3Repository {
 
-    final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-            .withRegion(Regions.US_EAST_1).build();
+    private final AmazonS3 s3;
 
-    public void uploadFile(String bucketName, String dnaKey, String dna) {
+    public S3Repository() {
+        Regions region = AwsRegionUtil.getAwsRegion();
+
+        s3 = AmazonS3ClientBuilder.standard()
+                .withRegion(region).build();
+                //.withRegion(Regions.US_EAST_1).build();
+    }
+
+    /*public void uploadFile(String bucketName, String dnaKey, String dna) {
         try {
             s3.putObject(bucketName, dnaKey, dna);
         } catch (AmazonServiceException e) {
             System.err.println(e.getErrorMessage());
             System.exit(1);
         }
-    }
+    }*/
 
     public String getFileContent(String s3BucketName, String s3Key) throws IOException {
         S3Object s3Object = s3.getObject(s3BucketName, s3Key);

@@ -2,19 +2,16 @@ package com.horacio.mutant;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
-import com.amazonaws.services.lambda.runtime.events.S3Event;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.event.S3EventNotification;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
 import com.google.gson.Gson;
-import com.horacio.mutant.repository.MongoRepository;
-import com.horacio.mutant.service.DnaIdBuilderSHA256;
+import com.horacio.mutant.repository.MongoDnaRepository;
+import com.horacio.mutant.repository.DnaKeyBuilderSHA256;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
@@ -22,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Lambda invoked from sqs
@@ -33,7 +29,7 @@ import java.util.Optional;
 @Log4j2
 @Deprecated
 public class SqsFromS3EventLambda implements RequestHandler<SQSEvent, Void> {
-    private MongoRepository mongoRepository = new MongoRepository();
+    private MongoDnaRepository mongoDnaRepository;
 
     @Override
     public Void handleRequest(SQSEvent sqsEvent, Context context) {
@@ -94,16 +90,16 @@ public class SqsFromS3EventLambda implements RequestHandler<SQSEvent, Void> {
             InputStream objectData = s3Object.getObjectContent();
 
             String dna = IOUtils.toString(objectData);
-            DnaIdBuilderSHA256 dnaIdBuilderSHA256 = new DnaIdBuilderSHA256();
-            String id = dnaIdBuilderSHA256.buildId(dna);
+            DnaKeyBuilderSHA256 dnaKeyBuilderSHA256 = new DnaKeyBuilderSHA256();
+            String id = dnaKeyBuilderSHA256.buildId(dna);
 
             if (srcBucket.equals("mutant-bucket")){
                 System.out.println("is mutant");
-                mongoRepository.insertMutant(id, dna);
+                //mongoRepository.insertMutant(id, dna);
             }
             else{
                 System.out.println("is human");
-                mongoRepository.insertHuman(id, dna);
+                //mongoRepository.insertHuman(id, dna);
             }
 
             System.out.println("deleting object");

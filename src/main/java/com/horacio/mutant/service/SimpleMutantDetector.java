@@ -2,19 +2,30 @@ package com.horacio.mutant.service;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.horacio.mutant.Environment;
 import org.apache.commons.lang3.StringUtils;
 
 //@Log4j2
-public class MutantDetector4Letters implements MutantDetector{
-    //TODO esto que sea una property. lo mismo si se cuenta horizontal, vertical, diagonal
-    //private static final int SEQUENCE_COUNT=2;
-    private int mutantSequenceSize; // 4 letters
-    private int mutantSequenceCount; // 2 occurrences
+public class SimpleMutantDetector implements MutantDetector{
+    private int mutantSequenceSize = 4;
+    private int mutantSequenceCount = 2;
 
-    public MutantDetector4Letters(int mutantSequenceSize,
-                                  int mutantSequenceCount){
-        this.mutantSequenceSize = mutantSequenceSize;
-        this.mutantSequenceCount = mutantSequenceCount;
+    public SimpleMutantDetector(){
+        String mutantChar = Environment.getInstance().get(Environment.Variable.MUTANT_CHAR, "4");
+        String mutantSequence = Environment.getInstance().get(Environment.Variable.MUTANT_SEQUENCE, "2");
+
+        try{
+           this.mutantSequenceSize = Integer.valueOf(mutantChar);
+        }catch(NumberFormatException e){
+            System.out.println(e);
+        }
+        try{
+            this.mutantSequenceCount = Integer.valueOf(mutantSequence);
+        }catch(NumberFormatException e){
+            System.out.println(e);
+        }
+
     }
 
     @Override

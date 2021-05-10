@@ -1,10 +1,10 @@
-package com.horacio.mutant.service;
+package com.horacio.mutant.repository;
 
 import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
 
-public class DnaIdBuilderSHA256 implements DnaIdBuilder {
+public class DnaKeyBuilderSHA256 implements DnaKeyBuilder {
     @Override
     public String buildId(String dna){
         String key = Hashing.sha256()

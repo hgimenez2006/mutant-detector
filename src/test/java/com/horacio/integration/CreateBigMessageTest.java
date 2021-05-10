@@ -1,4 +1,4 @@
-package com.horacio;
+package com.horacio.integration;
 
 import com.google.gson.Gson;
 import com.horacio.mutant.web.DnaRequest;
@@ -19,7 +19,7 @@ public class CreateBigMessageTest {
         int rowSize=1000;
         String[] dna = new String[rowSize];
         for (int i=0; i<rowSize; i++) {
-            dna[i] = RandomStringUtils.randomAlphabetic(rowSize);
+            dna[i] = RandomStringUtils.randomAlphabetic(rowSize).toUpperCase();
         }
 
         DnaRequest dnaRequest = new DnaRequest();

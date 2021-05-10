@@ -1,14 +1,17 @@
-package com.horacio;
+package com.horacio.integration;
 
 import com.horacio.mutant.service.AnalyzedDnaSender;
-import com.horacio.mutant.service.AnalyzedDnaSqsSender;
+import com.horacio.mutant.sqs.AnalyzedDnaSqsSender;
 import com.horacio.mutant.service.DnaResult;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
 public class AnalyzedDnaSqsSenderTest {
 
-   // @Test
+    /**
+     * Sends message to dna-queue
+     */
+    //@Test
     public void testSend() {
         AnalyzedDnaSender analyzedDnaSqsSender = new AnalyzedDnaSqsSender();
 

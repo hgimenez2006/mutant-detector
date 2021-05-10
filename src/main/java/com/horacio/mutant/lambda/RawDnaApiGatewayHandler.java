@@ -5,15 +5,21 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
+import com.horacio.mutant.service.AnalyzedDnaSender;
 import com.horacio.mutant.service.DnaResult;
-import com.horacio.mutant.service.DnaService;
+import com.horacio.mutant.service.MutantDetector;
+import com.horacio.mutant.service.SimpleMutantDetector;
+import com.horacio.mutant.service.RawDnaService;
+import com.horacio.mutant.sqs.AnalyzedDnaSqsSender;
 import com.horacio.mutant.web.DnaRequest;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
 @Log4j2
 public class RawDnaApiGatewayHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-    private DnaService dnaService = new DnaService();
+    private MutantDetector mutantDetector = new SimpleMutantDetector();
+    private AnalyzedDnaSender analyzedDnaSender = new AnalyzedDnaSqsSender();
+    private RawDnaService rawDnaService = new RawDnaService(analyzedDnaSender, mutantDetector);
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent, Context context) { Gson gson = new Gson();
@@ -27,7 +33,7 @@ public class RawDnaApiGatewayHandler implements RequestHandler<APIGatewayProxyRe
             }
             mutantRequest = gson.fromJson(apiGatewayProxyRequestEvent.getBody(), DnaRequest.class);
             String[] dnaRequest = mutantRequest.getDna();
-            DnaResult result  = dnaService.analyzeDnaAndSendResult(dnaRequest);
+            DnaResult result  = rawDnaService.analyzeDnaAndSendResult(dnaRequest);
 
             int statusCode = result.isMutant() ? 200 : 203;
             response.setStatusCode(statusCode);
@@ -41,11 +47,4 @@ public class RawDnaApiGatewayHandler implements RequestHandler<APIGatewayProxyRe
 
         return response;
     }
-
-    private void init(Context context) {
-        //sgMongoClusterURI = System.getenv("SCALEGRID_MONGO_CLUSTER_URI");
-        //sgMongoDbName = System.getenv("SCALEGRID_MONGO_DB_NAME");
-    }
-
-
 }
