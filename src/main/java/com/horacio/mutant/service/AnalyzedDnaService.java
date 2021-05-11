@@ -27,6 +27,23 @@ public class AnalyzedDnaService {
         dnaRepository.insertDnaResult(dnaResult);
     }
 
+   public Stats getStats(){
+        long humanCount = dnaRepository.getHumanCount();
+        long mutantCount = dnaRepository.getMutantCount();
+        float ratio = mutantCount;
+        if (humanCount > 0){
+           ratio = (float)mutantCount/humanCount;
+        }
+
+        Stats stats = Stats.builder()
+                .count_human_dna(humanCount)
+                .count_mutant_dna(mutantCount)
+                .ratio(ratio)
+                .build();
+
+        return stats;
+    }
+
     private DnaResult getDnaResult(String msgBody) throws IOException {
         String dnaResultJson;
         if (msgBody.contains(AnalyzedDnaSqsHandler.SQS_MSG_BUCKET_NAME)){

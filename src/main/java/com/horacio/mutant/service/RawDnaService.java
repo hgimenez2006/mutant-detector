@@ -22,25 +22,6 @@ public class RawDnaService {
 
         return result;
     }
-
-    /*public Stats getStats(){
-        long humanCount = mongoRepository.getHumanCount();
-        //long humanCount = 0;
-        long mutantCount = mongoRepository.getMutantCount();
-        //long mutantCount = 0;
-
-        Stats stats = new Stats();
-        stats.setCount_human_dna(humanCount);
-        stats.setCount_mutant_dna(mutantCount);
-
-        double ratio = mutantCount;
-        if (humanCount > 0){
-            ratio = mutantCount / humanCount;
-        }
-        stats.setRatio(ratio);
-
-        return stats;
-    }*/
 }
 
 

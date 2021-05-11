@@ -38,7 +38,7 @@ public class AnalyzedDnaSqsReceiverTest extends IntegrationTestBase{
     * ["software.amazon.payloadoffloading.PayloadS3Pointer",{"s3BucketName":"sqs-dna","s3Key":"8b79b963-244f-4056-910f-ad6c06bca726"}]
 
      * */
-    @Test
+    //@Test
     public void testReceiver(){
         ReceiveMessageResult receiveMessageResult = sqs.receiveMessage(url);
 

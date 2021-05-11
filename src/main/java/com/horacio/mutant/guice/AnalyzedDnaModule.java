@@ -13,6 +13,5 @@ public class AnalyzedDnaModule extends AbstractModule {
         bind(DnaKeyBuilder.class).to(DnaKeyBuilderSHA256.class);
         bind(DnaRepository.class).to(MongoDnaRepository.class);
         bind(S3Repository.class);
-
     }
 }
