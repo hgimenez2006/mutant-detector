@@ -1,38 +1,37 @@
 package com.horacio.mutant.service;
 
-import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
-@Log4j2
-public class MutantDetector4Letters implements MutantDetector{
-    //TODO esto que sea una property. lo mismo si se cuenta horizontal, vertical, diagonal
-    //private static final int SEQUENCE_COUNT=2;
-    private int mutantSequenceSize; // 4 letters
-    private int mutantSequenceCount; // 2 occurrences
+import com.horacio.mutant.Environment;
+import com.horacio.mutant.exception.InvalidDnaException;
+import org.apache.commons.lang3.StringUtils;
 
-    @Autowired
-    public MutantDetector4Letters(@Value("${mutantSequenceSize:4}") int mutantSequenceSize,
-                                  @Value("${mutantSequenceCount:2}") int mutantSequenceCount){
-        this.mutantSequenceSize = mutantSequenceSize;
-        this.mutantSequenceCount = mutantSequenceCount;
+//@Log4j2
+public class HumbleMutantDetector implements MutantDetector{
+    private int mutantSequenceSize;
+    private int mutantSequenceCount;
+
+    public HumbleMutantDetector(){
+        String mutantChar = Environment.getInstance().get(Environment.Variable.MUTANT_CHAR, "4");
+        String mutantSequence = Environment.getInstance().get(Environment.Variable.MUTANT_SEQUENCE, "2");
+        try{
+           this.mutantSequenceSize = Integer.valueOf(mutantChar);
+           this.mutantSequenceCount = Integer.valueOf(mutantSequence);
+        }catch(NumberFormatException e){
+            new RuntimeException(e);
+        }
     }
 
     @Override
-    public DetectionResult detectMutant(String[] dna) {
+    public DnaResult detectMutant(String[] dna) throws InvalidDnaException {
         validateDna(dna);
         return analyzeDna(dna);
     }
 
-    private void validateDna(String[] dna){
+    private void validateDna(String[] dna) throws InvalidDnaException {
         if (dna==null || dna.length == 0){
-            throw new IllegalArgumentException("dna is null or empty");
+            throw new InvalidDnaException("dna is null or empty");
         }
     }
 
@@ -52,10 +51,10 @@ public class MutantDetector4Letters implements MutantDetector{
         }
     }*/
 
-    private DetectionResult analyzeDna(String[] dna){
+    private DnaResult analyzeDna(String[] dna){
 
         //TODO enable/disble logging
-        log.debug("Analyzind Dna");
+        //log.debug("Analyzind Dna");
 
         Map<Integer, CharCount> verticalMatches = new HashMap<>(); // key = column, value = match count
         Map<Integer, CharCount> diagonal1MatchesCurrRow = new HashMap<>(); // key = column, value = match count
@@ -112,7 +111,7 @@ public class MutantDetector4Letters implements MutantDetector{
 
         //TODO improve this
         String completeDna = String.join("", dna);
-        return new DetectionResult(sequenceCount==2, completeDna);
+        return new DnaResult(sequenceCount==2, completeDna);
     }
 
     private boolean isSequenceCountReached(int sequenceCount){

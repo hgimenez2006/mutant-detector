@@ -1,5 +1,7 @@
 package com.horacio.mutant.service;
 
+import com.horacio.mutant.exception.InvalidDnaException;
+
 public interface MutantDetector {
-    DetectionResult detectMutant(String[] dna);
+    DnaResult detectMutant(String[] dna) throws InvalidDnaException;
 }

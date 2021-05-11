@@ -1,9 +1,9 @@
 package com.horacio.mutant.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
+import com.horacio.mutant.service.DnaResult;
 
-@Repository
-public interface DnaRepository extends MongoRepository<DnaModel, String> {
-
+public interface DnaRepository {
+    void insertDnaResult(DnaResult dnaResult);
+    long getHumanCount();
+    long getMutantCount();
 }
