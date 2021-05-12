@@ -1,13 +1,11 @@
 package com.dna.stats.repository;
 
-import com.dna.stats.Environment;
+import com.dna.common.Environment;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
 
 import javax.inject.Inject;
-import java.util.Date;
 
 public class MongoDnaRepository implements DnaRepository{
     private static String DEFAULT_URL = "mongodb+srv://horacio:mutantes2000@cluster0.7pfzt.mongodb.net/test?retryWrites=true&w=majority";

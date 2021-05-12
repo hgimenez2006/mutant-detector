@@ -10,6 +10,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>dna-analyzer</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.horacio</groupId>
+            <artifactId>dna-common</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 </project>

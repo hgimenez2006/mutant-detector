@@ -1,6 +1,6 @@
 package com.dna.persister.repository;
 
-import com.dna.persister.Environment;
+import com.dna.common.Environment;
 import com.dna.persister.service.DnaResult;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -8,6 +8,7 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Date;
 
 public class MongoDnaRepository implements DnaRepository{
@@ -16,6 +17,11 @@ public class MongoDnaRepository implements DnaRepository{
 
     private MongoDatabase mongoDatabase;
     private final DnaKeyBuilder dnaKeyBuilder; // = new DnaKeyBuilderSHA256();
+
+    //@Named("${mongodb.url}")
+    private String defaultMongoDbUrl;
+    //@Named("mongodb.dbName")
+    private String defaultMongoDbName;
 
     @Inject
     public MongoDnaRepository(final DnaKeyBuilder dnaKeyBuilder) {

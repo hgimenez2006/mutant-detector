@@ -10,12 +10,6 @@
         <module>dna-persister</module>
         <module>dna-stats</module>
     </modules>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.1.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
     <groupId>com.horacio</groupId>
     <artifactId>mutant-detector</artifactId>
     <version>1.0</version>
@@ -23,26 +17,20 @@
     <description>Detector de mutantes</description>
 
     <properties>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
         <java.version>1.8</java.version>
         <wrapper.version>1.0.17.RELEASE</wrapper.version>
         <guice.version>4.1.0</guice.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>
-<!--        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
-            <version>3.13.1</version>
-        </dependency>-->
-
-        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-elasticache -->
-        <!-- https://mvnrepository.com/artifact/net.spy/spymemcached -->
         <dependency>
             <groupId>net.spy</groupId>
             <artifactId>spymemcached</artifactId>
             <version>2.12.3</version>
         </dependency>
-
 
         <dependency>
             <groupId>com.google.inject</groupId>
@@ -99,7 +87,7 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
+            <version>${jaxb-api.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
@@ -151,11 +139,11 @@
 
 
         <!-- https://mvnrepository.com/artifact/com.google.dagger/dagger -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.google.dagger</groupId>
             <artifactId>dagger</artifactId>
             <version>2.16</version>
-        </dependency>
+        </dependency>-->
 
         <!--<dependency>
             <groupId>io.symphonia</groupId>
@@ -170,12 +158,6 @@
         </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>3.12.1</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -187,12 +169,14 @@
             <artifactId>gson</artifactId>
             <version>2.8.6</version>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <version>1.18.20</version>
+            <scope>provided</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -200,19 +184,10 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -222,17 +197,6 @@
 
         </dependencies>
     </dependencyManagement>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>my-repo-bucket-snapshot</id>
-            <url>s3://mutant</url>
-        </snapshotRepository>
-        <repository>
-            <id>my-repo-bucket-release</id>
-            <url>s3://mutant</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <!--<extensions>
@@ -292,6 +256,14 @@
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                     <shadedClassifierName>aws</shadedClassifierName>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

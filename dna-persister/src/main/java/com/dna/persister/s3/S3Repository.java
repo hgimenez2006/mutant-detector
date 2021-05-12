@@ -4,7 +4,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
-import com.dna.persister.util.AwsRegionUtil;
+import com.dna.common.AwsRegionUtil;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;

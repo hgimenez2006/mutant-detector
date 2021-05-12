@@ -1,7 +1,7 @@
 package com.dna.analyzer.service;
 
-import com.dna.analyzer.Environment;
 import com.dna.analyzer.exception.InvalidDnaException;
+import com.dna.common.Environment;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
