@@ -18,7 +18,7 @@ public class DnaPersisterModule extends AbstractModule {
         bind(DnaRepository.class).to(MongoDnaRepository.class);
         bind(S3Repository.class);
 
-        Properties defaults = new Properties();
+        /*Properties defaults = new Properties();
         defaults.setProperty("z", "default");
         try{
             Properties properties = new Properties(defaults);
@@ -27,6 +27,6 @@ public class DnaPersisterModule extends AbstractModule {
         } catch (IOException e){
             System.out.println("Could not load properties file");
             e.printStackTrace();
-        }
+        }*/
     }
 }
