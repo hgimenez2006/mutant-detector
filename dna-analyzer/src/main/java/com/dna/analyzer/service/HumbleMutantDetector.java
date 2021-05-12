@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Log4j2
 public class HumbleMutantDetector implements MutantDetector {
     private int mutantSequenceSize;
     private int mutantSequenceCount;
@@ -106,10 +105,8 @@ public class HumbleMutantDetector implements MutantDetector {
 
             diagonal2MatchesPrevRow = diagonal2MatchesCurrRow;
             diagonal2MatchesCurrRow = new HashMap<>();
-
         }
 
-        //TODO improve this
         String completeDna = String.join("", dna);
         return new DnaResult(sequenceCount==2, completeDna);
     }
@@ -185,7 +182,6 @@ public class HumbleMutantDetector implements MutantDetector {
         return  sequenceCount;
     }
 
-    //TODO: mover clase para afuera?
     private class CharCount{
         private char charFound;
         private int count;
@@ -209,7 +205,6 @@ public class HumbleMutantDetector implements MutantDetector {
         }
 
         private boolean isSequenceFound(){
-            //TODO esto que sea una property, y sacarle el 4letters al nombre de esta clase
             return this.count == mutantSequenceSize;
         }
     }

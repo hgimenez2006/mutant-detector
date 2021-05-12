@@ -29,27 +29,17 @@ public class DnaSqsSender implements DnaSender {
     final ExtendedClientConfiguration extendedClientConfig =
             new ExtendedClientConfiguration()
                     .withPayloadSupportEnabled(s3, bucketName, true);
-                    //Message threshold controls the maximum message size that will be allowed to be published
-                    //through SNS using the extended client. Payload of messages exceeding this value will be stored in
-                    //S3. The default value of this parameter is 256 KB which is the maximum message size in SNS (and SQS).
-                    //.withPayloadSizeThreshold();
-                    //.withLargePayloadSupportEnabled(s3, S3_BUCKET_NAME);
 
     final AmazonSQS sqsExtended =
             new AmazonSQSExtendedClient(
                     AmazonSQSClientBuilder.standard().withRegion(Regions.US_EAST_1).build(),
                     extendedClientConfig);
 
-    private final int delaySeconds = 5;
-
     @Override
-    public void sendAnalyzedDna(DnaResult detectionResult) {
-        System.out.println("Invoking ulr=" + sqsUrl);
-
+    public void sendAnalyzedDnaToPersister(DnaResult detectionResult) {
         SendMessageRequest sendMessageRequest = new SendMessageRequest()
                 .withQueueUrl(sqsUrl)
-                .withMessageBody(new Gson().toJson(detectionResult))
-                .withDelaySeconds(delaySeconds);
+                .withMessageBody(new Gson().toJson(detectionResult));
 
         sqsExtended.sendMessage(sendMessageRequest);
     }

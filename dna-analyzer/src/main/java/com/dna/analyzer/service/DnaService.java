@@ -5,7 +5,6 @@ import com.dna.analyzer.sender.DnaSender;
 
 import javax.inject.Inject;
 
-//@Log4j2
 public class DnaService {
     private final MutantDetector mutantDetector;
     private final DnaSender dnaSender;
@@ -19,8 +18,7 @@ public class DnaService {
 
     public DnaResult analyzeDnaAndSendResult(String[] dna) throws InvalidDnaException {
         DnaResult result = mutantDetector.detectMutant(dna);
-        dnaSender.sendAnalyzedDna(result);
-
+        dnaSender.sendAnalyzedDnaToPersister(result);
         return result;
     }
 }

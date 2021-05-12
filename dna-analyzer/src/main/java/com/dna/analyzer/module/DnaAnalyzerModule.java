@@ -13,7 +13,6 @@ public class DnaAnalyzerModule extends AbstractModule {
         bind(DnaService.class);
         bind(MutantDetector.class).to(HumbleMutantDetector.class);
         bind(DnaSender.class).to(DnaSqsSender.class);
-
-    }
+   }
 }
 

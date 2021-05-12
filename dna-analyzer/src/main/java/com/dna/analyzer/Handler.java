@@ -24,29 +24,39 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent,
                                                       Context context) {
         LambdaLogger logger = context.getLogger();
-        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-
-        try {
+        APIGatewayProxyResponseEvent response;
+        try{
             DnaResult result = handleRequestPlease(apiGatewayProxyRequestEvent.getBody());
-            response.setStatusCode(result.isMutant() ? HttpStatus.SC_OK : HttpStatus.SC_FORBIDDEN);
-            response.setBody(result.isMutant() ? "ADN mutante" : "ADN humano");
+            response = getResponse(result);
         } catch (InvalidDnaException e) {
             logger.log("Returing BAD_REQUEST :" + e.getMessage());
+            response = new APIGatewayProxyResponseEvent();
             response.setStatusCode(HttpStatus.SC_BAD_REQUEST);
         }
         return response;
     }
 
-    private DnaResult handleRequestPlease(String requestBody) throws InvalidDnaException {
+    protected APIGatewayProxyResponseEvent getResponse(DnaResult result){
+        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
+        response.setStatusCode(result.isMutant() ? HttpStatus.SC_OK : HttpStatus.SC_FORBIDDEN);
+        response.setBody(result.isMutant() ? "ADN mutante" : "ADN humano");
+        return response;
+    }
+
+    protected DnaResult handleRequestPlease(String requestBody) throws InvalidDnaException {
         if (StringUtils.isBlank(requestBody)){
             throw new InvalidDnaException("Request body is empty");
         }
 
-        DnaRequest mutantRequest = new Gson().fromJson(requestBody, DnaRequest.class);
-        if (mutantRequest == null){
+        try {
+            DnaRequest mutantRequest = new Gson().fromJson(requestBody, DnaRequest.class);
+            /*if (mutantRequest == null) {
+                throw new InvalidDnaException("Request format is invalid");
+            }*/
+            return dnaService.analyzeDnaAndSendResult(mutantRequest.getDna());
+
+        }catch(Exception e){
             throw new InvalidDnaException("Request format is invalid");
         }
-
-        return dnaService.analyzeDnaAndSendResult(mutantRequest.getDna());
     }
 }
