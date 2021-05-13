@@ -93,6 +93,19 @@ public class HumbleMutantDetectorTest {
     }
 
     @Test
+    public void mutant_horizontal_vertical2() throws InvalidDnaException {
+        String[] dna = new String[4];
+        dna[0] = "ATTCTA";
+        dna[1] = "ACGGTC";
+        dna[2] = "CGATTC";
+        dna[3] = "AAAATG";
+
+
+        boolean res = detectMutant(dna);
+        Assert.assertTrue(res);
+    }
+
+    @Test
     public void human_() throws InvalidDnaException {
         String[] dna = new String[1];
         dna[0] = "AAAAAAA"; // falta un caracter para mutante
@@ -103,7 +116,7 @@ public class HumbleMutantDetectorTest {
     @Test
     public void mutant_() throws InvalidDnaException {
         String[] dna = new String[1];
-        dna[0] = "AAAAAAAA"; // falta un caracter para mutante
+        dna[0] = "AAAAAAAA";
         boolean res = detectMutant(dna);
         Assert.assertTrue(res);
     }

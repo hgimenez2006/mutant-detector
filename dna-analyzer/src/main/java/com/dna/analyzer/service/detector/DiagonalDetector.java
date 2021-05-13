@@ -15,21 +15,16 @@ abstract class DiagonalDetector implements SequenceDetector {
     abstract boolean isRigthDiagonal();
 
     @Override
-    public int detect(int colIndex, char currChar, int sequenceCount, int rowSize){
+    public boolean detect(int colIndex, char currChar, int rowSize){
         int index = isRigthDiagonal()? colIndex-1 : colIndex+1;
         CharCount diagonalCount = diagonalMatchesPrevRow.get(index);
+        boolean sequenceDetected=false;
 
         if (diagonalCount != null){
             if (diagonalCount.isSameCharThanPrevious(currChar)){
                 diagonalCount.addCount();
                 if (diagonalCount.isSequenceFound()) {
-                    String tipo = isRigthDiagonal()? "right" : "left";
-                    System.out.println("diagonal " + tipo + " -> " + currChar + " [colIndex=" + colIndex + " - index=" + index+ "]");
-                    sequenceCount++;
-                    /*if (sequenceSize == mutantSequenceSize){
-                        // we found a mutant sequence : n number of same characters together
-                        return sequenceSize;
-                    }*/
+                    sequenceDetected = true;
                     diagonalCount.reset();
                 }
             }
@@ -49,7 +44,7 @@ abstract class DiagonalDetector implements SequenceDetector {
             prepareForNextRow();
         }
 
-        return sequenceCount;
+        return sequenceDetected;
     }
 
     private void prepareForNextRow(){

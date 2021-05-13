@@ -10,7 +10,7 @@ public class DnaValidator {
         }
     }
 
-    public static void validateDnaRow(int rowSize, String dnaRow, int rowIndex) throws InvalidDnaException{
+    public static void validateDnaRowSize(int rowSize, String dnaRow, int rowIndex) throws InvalidDnaException{
         if (StringUtils.isEmpty(dnaRow)){
             throw new InvalidDnaException("dna row " + rowIndex + " is empty");
         }

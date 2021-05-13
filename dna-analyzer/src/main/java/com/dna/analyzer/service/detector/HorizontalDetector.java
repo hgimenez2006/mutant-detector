@@ -10,16 +10,12 @@ public class HorizontalDetector implements SequenceDetector {
     }
 
     @Override
-    public int detect(int colIndex, char currChar, int sequenceCount, int rowSize) {
+    public boolean detect(int colIndex, char currChar, int rowSize) {
+        boolean sequenceDetected=false;
         if (charCount.isSameCharThanPrevious(currChar)){
             charCount.addCount();
             if (charCount.isSequenceFound()) {
-                System.out.println("horizontal -> " + currChar);
-                sequenceCount++;
-                /*if (sequenceCount == mutantSequenceSize){
-                    // we found a mutant sequence : n number of same characters together
-                    return sequenceCount;
-                }*/
+                sequenceDetected = true;
                 charCount.reset();
             }
             else {
@@ -35,7 +31,7 @@ public class HorizontalDetector implements SequenceDetector {
             prepareForNextRow();
         }
 
-        return sequenceCount;
+        return sequenceDetected;
     }
 
     private void prepareForNextRow(){

@@ -12,7 +12,8 @@ public class VerticalDetector implements SequenceDetector {
     }
 
     @Override
-    public int detect(int colIndex, char currChar, int sequenceCount, int rowSize){
+    public boolean detect(int colIndex, char currChar, int rowSize){
+        boolean sequenceDetected = false;
         CharCount verticalCount = verticalMatches.get(colIndex);
         if (verticalCount != null){
 
@@ -21,12 +22,7 @@ public class VerticalDetector implements SequenceDetector {
                 verticalCount.setCharFound(currChar);
 
                 if (verticalCount.isSequenceFound()) {
-                    System.out.println("vertical -> " + currChar);
-                    sequenceCount++;
-                    /*if (sequenceSize == mutantSequenceSize){
-                        // we found a mutant sequence : n number of same characters together
-                        return sequenceSize;
-                    }*/
+                    sequenceDetected = true;
                     verticalCount.reset();
                 }
             }
@@ -41,6 +37,6 @@ public class VerticalDetector implements SequenceDetector {
 
         verticalMatches.put(colIndex, verticalCount);
 
-        return sequenceCount;
+        return sequenceDetected;
     }
 }
