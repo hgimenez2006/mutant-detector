@@ -56,7 +56,7 @@ public class HumbleMutantDetector implements MutantDetector {
                     break;
                 }
 
-                /*for (SequenceDetector detector : detectors){
+                for (SequenceDetector detector : detectors){
                     sequenceCount = detector.detect(colIndex, currChar, sequenceCount);
                     if (isSequenceCountReached(sequenceCount)){
                         break;
@@ -64,8 +64,9 @@ public class HumbleMutantDetector implements MutantDetector {
                 }
                 if (isSequenceCountReached(sequenceCount)){
                     break;
-                }*/
+                }
 
+                /*
                 sequenceCount = horizontalDetector.detect(colIndex, currChar, sequenceCount);
                 if (isSequenceCountReached(sequenceCount)){
                     break;
@@ -84,13 +85,13 @@ public class HumbleMutantDetector implements MutantDetector {
                 sequenceCount = leftDiagonalDetector.detect(colIndex, currChar, sequenceCount);
                 if (isSequenceCountReached(sequenceCount)){
                     break;
-                }
+                }*/
             }
 
-            //detectors.stream().forEach(detector -> detector.nextRow());
-            horizontalDetector.nextRow();
+            detectors.stream().forEach(detector -> detector.nextRow());
+            /*horizontalDetector.nextRow();
             leftDiagonalDetector.nextRow();
-            rigthDiagonalDetector.nextRow();
+            rigthDiagonalDetector.nextRow();*/
         }
 
         boolean isMutant = isSequenceCountReached(sequenceCount);

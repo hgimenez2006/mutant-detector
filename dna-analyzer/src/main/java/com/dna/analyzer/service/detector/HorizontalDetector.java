@@ -9,9 +9,9 @@ public class HorizontalDetector implements SequenceDetector{
         charCount = new CharCount(mutantSequenceSize);
     }
 
-    public int detect(int colIndex, char currChar, int sequenceSize) {
+    public int detect(int colIndex, char currChar, int sequenceCount) {
         // TODO: we could have an adapter here
-        return detect(currChar, sequenceSize);
+        return detect(currChar, sequenceCount);
     }
 
     private int detect(char currChar, int sequenceCount){

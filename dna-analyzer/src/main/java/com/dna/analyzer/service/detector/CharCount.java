@@ -23,14 +23,9 @@ public class CharCount {
     }
 
     public boolean isSameCharThanPrevious(char currChar){
-        boolean res = this.charFound == currChar;
-        if (res){
-            //System.out.println("same char found -> " + charFound + "=" + currChar);
-        }
-        return res;
+        return this.charFound == currChar;
     }
 
-    // encontre n caracteres seguidos
     public boolean isSequenceFound(){
         return this.count == mutantSequenceSize;
     }
