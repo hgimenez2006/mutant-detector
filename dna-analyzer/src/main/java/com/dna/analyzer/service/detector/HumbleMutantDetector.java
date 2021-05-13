@@ -5,22 +5,29 @@ import com.dna.analyzer.service.DnaResult;
 import com.dna.analyzer.service.MutantDetector;
 import com.dna.common.Environment;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 
 public class HumbleMutantDetector implements MutantDetector {
     private int mutantSequenceSize; // cantidad de caracteres para ser mutante
     private int mutantSequenceCount; // cantidad de veces que se deben repetir las secuencias
+    private List<SequenceDetector> sequenceDetectors;
 
-    public HumbleMutantDetector(){
-        String mutantSequenceSize = Environment.getInstance().get(Environment.Variable.MUTANT_CHAR, "4");
-        String mutantSequenceCount = Environment.getInstance().get(Environment.Variable.MUTANT_SEQUENCE, "2");
+    @Inject
+    public HumbleMutantDetector(final SequenceDetectorFactory sequenceDetectorFactory){
+        String mutantSequenceSizeVar = Environment.getInstance().get(Environment.Variable.MUTANT_CHAR, "4");
+        String mutantSequenceCountVar = Environment.getInstance().get(Environment.Variable.MUTANT_SEQUENCE, "2");
+
         try{
-           this.mutantSequenceSize = Integer.valueOf(mutantSequenceSize);
-           this.mutantSequenceCount = Integer.valueOf(mutantSequenceCount);
-        }catch(NumberFormatException e){
+           mutantSequenceSize = Integer.valueOf(mutantSequenceSizeVar);
+           mutantSequenceCount = Integer.valueOf(mutantSequenceCountVar);
+           sequenceDetectors = sequenceDetectorFactory.getSequenceDetectors(mutantSequenceSize);
+        }
+        catch(NumberFormatException e){
             new RuntimeException(e);
         }
+
     }
 
     @Override
@@ -32,16 +39,6 @@ public class HumbleMutantDetector implements MutantDetector {
     private DnaResult analyzeDna(String[] dna) throws InvalidDnaException {
         int rowSize = dna[0].length();
         int sequenceCount=0;
-
-        HorizontalDetector horizontalDetector = new HorizontalDetector(mutantSequenceSize);
-        VerticalDetector verticalDetector = new VerticalDetector(mutantSequenceSize);
-        // detector for diagonal in one way
-        DiagonalDetector leftDiagonalDetector = new LeftDiagonalDetector(mutantSequenceSize);
-        // detector for diagonal in the other way
-        DiagonalDetector rigthDiagonalDetector = new RigthDiagonalDetector(mutantSequenceSize);
-
-        List<SequenceDetector> detectors = Arrays.asList(horizontalDetector, verticalDetector,
-                leftDiagonalDetector, rigthDiagonalDetector);
 
         for (int rowIndex=0; rowIndex<dna.length && sequenceCount<mutantSequenceCount; rowIndex++){
             String row = dna[rowIndex];
@@ -56,8 +53,8 @@ public class HumbleMutantDetector implements MutantDetector {
                     break;
                 }
 
-                for (SequenceDetector detector : detectors){
-                    sequenceCount = detector.detect(colIndex, currChar, sequenceCount);
+                for (SequenceDetector sequenceDetector : sequenceDetectors){
+                    sequenceCount = sequenceDetector.detect(colIndex, currChar, sequenceCount);
                     if (isSequenceCountReached(sequenceCount)){
                         break;
                     }
@@ -65,33 +62,8 @@ public class HumbleMutantDetector implements MutantDetector {
                 if (isSequenceCountReached(sequenceCount)){
                     break;
                 }
-
-                /*
-                sequenceCount = horizontalDetector.detect(colIndex, currChar, sequenceCount);
-                if (isSequenceCountReached(sequenceCount)){
-                    break;
-                }
-
-                sequenceCount = verticalDetector.detect(colIndex, currChar, sequenceCount);
-                if (isSequenceCountReached(sequenceCount)){
-                    break;
-                }
-
-                sequenceCount = rigthDiagonalDetector.detect(colIndex, currChar, sequenceCount);
-                if (isSequenceCountReached(sequenceCount)) {
-                    break;
-                }
-
-                sequenceCount = leftDiagonalDetector.detect(colIndex, currChar, sequenceCount);
-                if (isSequenceCountReached(sequenceCount)){
-                    break;
-                }*/
             }
-
-            detectors.stream().forEach(detector -> detector.nextRow());
-            /*horizontalDetector.nextRow();
-            leftDiagonalDetector.nextRow();
-            rigthDiagonalDetector.nextRow();*/
+            sequenceDetectors.stream().forEach(detector -> detector.nextRow());
         }
 
         boolean isMutant = isSequenceCountReached(sequenceCount);

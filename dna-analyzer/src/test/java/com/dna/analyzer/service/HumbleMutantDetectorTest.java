@@ -2,14 +2,15 @@ package com.dna.analyzer.service;
 
 import com.dna.analyzer.exception.InvalidDnaException;
 import com.dna.analyzer.service.detector.HumbleMutantDetector;
+import com.dna.analyzer.service.detector.SequenceDetectorFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
 public class HumbleMutantDetectorTest {
-
-    private MutantDetector mutantDetector = new HumbleMutantDetector();
+    private SequenceDetectorFactory sequenceDetectorFactory = new SequenceDetectorFactory();
+    private MutantDetector mutantDetector = new HumbleMutantDetector(sequenceDetectorFactory);
 
     private boolean detectMutant(String[] dna) throws InvalidDnaException {
         DnaResult dnaResult = mutantDetector.detectMutant(dna);
