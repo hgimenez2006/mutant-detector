@@ -3,7 +3,7 @@ package com.dna.analyzer.service.detector;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VerticalDetector {
+public class VerticalDetector implements SequenceDetector{
     private Map<Integer, CharCount> verticalMatches = new HashMap<>();
     private int mutantSequenceSize;
 
@@ -33,4 +33,6 @@ public class VerticalDetector {
 
         return sequenceSize;
     }
+
+    public void nextRow(){}
 }

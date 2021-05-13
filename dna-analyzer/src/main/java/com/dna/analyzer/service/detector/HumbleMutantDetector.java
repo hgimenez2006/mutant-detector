@@ -5,6 +5,9 @@ import com.dna.analyzer.service.DnaResult;
 import com.dna.analyzer.service.MutantDetector;
 import com.dna.common.Environment;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class HumbleMutantDetector implements MutantDetector {
     private int mutantSequenceSize; // cantidad de caracteres para ser mutante
     private int mutantSequenceCount; // cantidad de veces que se deben repetir las secuencias
@@ -33,9 +36,12 @@ public class HumbleMutantDetector implements MutantDetector {
         HorizontalDetector horizontalDetector = new HorizontalDetector(mutantSequenceSize);
         VerticalDetector verticalDetector = new VerticalDetector(mutantSequenceSize);
         // detector for diagonal in one way
-        DiagonalDetector diagonalDetector1 = new DiagonalDetector(mutantSequenceSize);
+        DiagonalDetector leftDiagonalDetector = new LeftDiagonalDetector(mutantSequenceSize);
         // detector for diagonal in the other way
-        DiagonalDetector diagonalDetector2 = new DiagonalDetector(mutantSequenceSize);
+        DiagonalDetector rigthDiagonalDetector = new RigthDiagonalDetector(mutantSequenceSize);
+
+        List<SequenceDetector> detectors = Arrays.asList(horizontalDetector, verticalDetector,
+                leftDiagonalDetector, rigthDiagonalDetector);
 
         for (int rowIndex=0; rowIndex<dna.length && sequenceCount<mutantSequenceCount; rowIndex++){
             String row = dna[rowIndex];
@@ -50,30 +56,21 @@ public class HumbleMutantDetector implements MutantDetector {
                     break;
                 }
 
-                sequenceCount = horizontalDetector.detect(currChar, sequenceCount);
-                if (isSequenceCountReached(sequenceCount)){
-                    break;
+                for (SequenceDetector detector : detectors){
+                    sequenceCount = detector.detect(colIndex, currChar, sequenceCount);
+                    if (isSequenceCountReached(sequenceCount)){
+                        break;
+                    }
                 }
-
-                sequenceCount = verticalDetector.detect(colIndex, currChar, sequenceCount);
-                if (isSequenceCountReached(sequenceCount)){
-                    break;
-                }
-
-                sequenceCount = diagonalDetector1.detect(colIndex, currChar, sequenceCount, true);
-                if (isSequenceCountReached(sequenceCount)) {
-                    break;
-                }
-
-                sequenceCount = diagonalDetector2.detect(colIndex, currChar, sequenceCount, false);
                 if (isSequenceCountReached(sequenceCount)){
                     break;
                 }
             }
 
-            horizontalDetector.nextRow();
-            diagonalDetector1.nextRow();
-            diagonalDetector2.nextRow();
+            detectors.stream().forEach(detector -> detector.nextRow());
+/*            horizontalDetector.nextRow();
+            leftDiagonalDetector.nextRow();
+            rigthDiagonalDetector.nextRow();*/
         }
 
         boolean isMutant = isSequenceCountReached(sequenceCount);
