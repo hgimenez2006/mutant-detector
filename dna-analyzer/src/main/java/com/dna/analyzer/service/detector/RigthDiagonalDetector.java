@@ -1,4 +1,4 @@
-package com.dna.analyzer.service.detector.sequence;
+package com.dna.analyzer.service.detector;
 
 public class RigthDiagonalDetector extends DiagonalDetector{
     public RigthDiagonalDetector(int mutantSequenceSize){

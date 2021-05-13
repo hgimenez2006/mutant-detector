@@ -1,9 +1,8 @@
-package com.dna.analyzer.service.detector;
+package com.dna.analyzer.service;
 
 import com.dna.analyzer.exception.InvalidDnaException;
-import com.dna.analyzer.service.DnaResult;
-import com.dna.analyzer.service.MutantDetector;
-import com.dna.analyzer.service.detector.sequence.SequenceDetectorFactory;
+import com.dna.analyzer.service.detector.SequenceDetector;
+import com.dna.analyzer.service.detector.SequenceDetectorFactory;
 import com.dna.common.Environment;
 
 import javax.inject.Inject;

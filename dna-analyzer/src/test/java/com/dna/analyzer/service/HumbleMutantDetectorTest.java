@@ -1,8 +1,7 @@
 package com.dna.analyzer.service;
 
 import com.dna.analyzer.exception.InvalidDnaException;
-import com.dna.analyzer.service.detector.HumbleMutantDetector;
-import com.dna.analyzer.service.detector.sequence.SequenceDetectorFactory;
+import com.dna.analyzer.service.detector.SequenceDetectorFactory;
 import org.junit.Assert;
 import org.junit.Test;
 

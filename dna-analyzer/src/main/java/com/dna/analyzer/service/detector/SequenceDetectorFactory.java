@@ -1,6 +1,4 @@
-package com.dna.analyzer.service.detector.sequence;
-
-import com.dna.analyzer.service.detector.SequenceDetector;
+package com.dna.analyzer.service.detector;
 
 import java.util.Arrays;
 import java.util.List;

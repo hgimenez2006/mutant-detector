@@ -1,7 +1,4 @@
-package com.dna.analyzer.service.detector.sequence;
-
-import com.dna.analyzer.service.detector.CharCount;
-import com.dna.analyzer.service.detector.SequenceDetector;
+package com.dna.analyzer.service.detector;
 
 import java.util.HashMap;
 import java.util.Map;

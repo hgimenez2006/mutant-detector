@@ -1,4 +1,4 @@
-package com.dna.analyzer.service.detector;
+package com.dna.analyzer.service;
 
 import com.dna.analyzer.exception.InvalidDnaException;
 import org.apache.commons.lang3.StringUtils;
