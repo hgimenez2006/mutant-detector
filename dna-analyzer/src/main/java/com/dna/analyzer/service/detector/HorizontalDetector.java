@@ -9,12 +9,8 @@ public class HorizontalDetector implements SequenceDetector {
         charCount = new CharCount(mutantSequenceSize);
     }
 
-    public int detect(int colIndex, char currChar, int sequenceCount) {
-        // TODO: we could have an adapter here
-        return detect(currChar, sequenceCount);
-    }
-
-    private int detect(char currChar, int sequenceCount){
+    @Override
+    public int detect(int colIndex, char currChar, int sequenceCount, int rowSize) {
         if (charCount.isSameCharThanPrevious(currChar)){
             charCount.addCount();
             if (charCount.isSequenceFound()) {
@@ -35,10 +31,14 @@ public class HorizontalDetector implements SequenceDetector {
             charCount.setCharFound(currChar);
         }
 
+        if (colIndex == (rowSize-1)){
+            prepareForNextRow();
+        }
+
         return sequenceCount;
     }
 
-    public void prepareForNextRow(){
+    private void prepareForNextRow(){
         charCount = new CharCount(mutantSequenceSize);
     }
 }

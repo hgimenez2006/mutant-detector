@@ -11,7 +11,8 @@ public class VerticalDetector implements SequenceDetector {
         this.mutantSequenceSize = mutantSequenceSize;
     }
 
-    public int detect(int colIndex, char currChar, int sequenceCount){
+    @Override
+    public int detect(int colIndex, char currChar, int sequenceCount, int rowSize){
         CharCount verticalCount = verticalMatches.get(colIndex);
         if (verticalCount != null){
 
@@ -42,6 +43,4 @@ public class VerticalDetector implements SequenceDetector {
 
         return sequenceCount;
     }
-
-    public void prepareForNextRow(){}
 }
