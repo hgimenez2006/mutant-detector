@@ -37,7 +37,6 @@ abstract class DiagonalDetector implements SequenceDetector {
             diagonalCount = new CharCount(mutantSequenceSize);
             diagonalCount.setCharFound(currChar);
         }
-        //diagonalCount.setCharFound(currChar);
         diagonalMatchesCurrRow.put(colIndex, diagonalCount);
 
         if (colIndex == (rowSize-1)){
