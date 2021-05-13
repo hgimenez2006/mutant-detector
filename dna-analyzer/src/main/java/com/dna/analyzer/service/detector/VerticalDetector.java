@@ -1,10 +1,17 @@
 package com.dna.analyzer.service.detector;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class VerticalChecker {
-    public static int verifyVertical(Map<Integer,CharCount> verticalMatches, int colIndex, char currChar,
-                               int sequenceSize, int mutantSequenceSize){
+public class VerticalDetector {
+    private Map<Integer, CharCount> verticalMatches = new HashMap<>();
+    private int mutantSequenceSize;
+
+    public VerticalDetector(int mutantSequenceSize){
+        this.mutantSequenceSize = mutantSequenceSize;
+    }
+
+    public int detect(int colIndex, char currChar, int sequenceSize){
         CharCount verticalCount = verticalMatches.get(colIndex);
         if (verticalCount != null){
             if (verticalCount.isSameCharThanPrevious(currChar)){

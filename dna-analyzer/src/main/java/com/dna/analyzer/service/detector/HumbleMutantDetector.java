@@ -5,9 +5,6 @@ import com.dna.analyzer.service.DnaResult;
 import com.dna.analyzer.service.MutantDetector;
 import com.dna.common.Environment;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class HumbleMutantDetector implements MutantDetector {
     private int mutantSequenceSize; // cantidad de caracteres para ser mutante
     private int mutantSequenceCount; // cantidad de veces que se deben repetir las secuencias
@@ -30,22 +27,19 @@ public class HumbleMutantDetector implements MutantDetector {
     }
 
     private DnaResult analyzeDna(String[] dna) throws InvalidDnaException {
-        // The key of all this maps is the column number
-        Map<Integer, CharCount> verticalMatches = new HashMap<>();
-        Map<Integer, CharCount> diagonal1MatchesCurrRow = new HashMap<>();
-        Map<Integer, CharCount> diagonal1MatchesPrevRow = new HashMap<>();
-        Map<Integer, CharCount> diagonal2MatchesCurrRow = new HashMap<>();
-        Map<Integer, CharCount> diagonal2MatchesPrevRow = new HashMap<>();
-
         int rowSize = dna[0].length();
         int sequenceCount=0;
 
+        HorizontalDetector horizontalDetector = new HorizontalDetector(mutantSequenceSize);
+        VerticalDetector verticalDetector = new VerticalDetector(mutantSequenceSize);
+        // detector for diagonal in one way
+        DiagonalDetector diagonalDetector1 = new DiagonalDetector(mutantSequenceSize);
+        // detector for diagonal in the other way
+        DiagonalDetector diagonalDetector2 = new DiagonalDetector(mutantSequenceSize);
+
         for (int rowIndex=0; rowIndex<dna.length && sequenceCount<mutantSequenceCount; rowIndex++){
-            // for each row verify size. should be equals to the first row
             String row = dna[rowIndex];
             DnaValidator.validateDnaRow(rowSize, row, rowIndex);
-
-            CharCount horizontalMatches = new CharCount(mutantSequenceSize);
 
             for (int colIndex=0; colIndex<row.length(); colIndex++){
                 char currChar = row.charAt(colIndex);
@@ -56,36 +50,30 @@ public class HumbleMutantDetector implements MutantDetector {
                     break;
                 }
 
-                sequenceCount = HorizontalChecker.verifyHorizontal(horizontalMatches, currChar, sequenceCount,
-                        mutantSequenceSize);
+                sequenceCount = horizontalDetector.detect(currChar, sequenceCount);
                 if (isSequenceCountReached(sequenceCount)){
                     break;
                 }
 
-                sequenceCount = VerticalChecker.verifyVertical(verticalMatches, colIndex, currChar, sequenceCount,
-                        mutantSequenceSize);
+                sequenceCount = verticalDetector.detect(colIndex, currChar, sequenceCount);
                 if (isSequenceCountReached(sequenceCount)){
                     break;
                 }
 
-                sequenceCount = DiagonalChecker.verifyDiagonal(diagonal1MatchesPrevRow, diagonal1MatchesCurrRow, colIndex,
-                        currChar, sequenceCount, true, mutantSequenceSize);
+                sequenceCount = diagonalDetector1.detect(colIndex, currChar, sequenceCount, true);
                 if (isSequenceCountReached(sequenceCount)) {
                     break;
                 }
 
-                sequenceCount = DiagonalChecker.verifyDiagonal(diagonal2MatchesPrevRow, diagonal2MatchesCurrRow, colIndex,
-                        currChar, sequenceCount, false, mutantSequenceSize);
+                sequenceCount = diagonalDetector2.detect(colIndex, currChar, sequenceCount, false);
                 if (isSequenceCountReached(sequenceCount)){
                     break;
                 }
             }
 
-            diagonal1MatchesPrevRow = diagonal1MatchesCurrRow;
-            diagonal1MatchesCurrRow = new HashMap<>();
-
-            diagonal2MatchesPrevRow = diagonal2MatchesCurrRow;
-            diagonal2MatchesCurrRow = new HashMap<>();
+            horizontalDetector.nextRow();
+            diagonalDetector1.nextRow();
+            diagonalDetector2.nextRow();
         }
 
         boolean isMutant = isSequenceCountReached(sequenceCount);
