@@ -1,14 +1,13 @@
 package com.dna.analyzer.service;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class DnaResult {
     private boolean mutant;
     private String dna;
-
-    public DnaResult(boolean mutant, String dna){
-        this.mutant = mutant;
-        this.dna = dna;
-    }
 }
