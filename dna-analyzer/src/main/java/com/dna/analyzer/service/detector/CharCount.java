@@ -15,6 +15,7 @@ public class CharCount {
 
     public void reset() {
         count = 1;
+        charFound = '\u0000';
     }
 
     public void addCount(){
@@ -22,7 +23,11 @@ public class CharCount {
     }
 
     public boolean isSameCharThanPrevious(char currChar){
-        return this.charFound == currChar;
+        boolean res = this.charFound == currChar;
+        if (res){
+            //System.out.println("same char found -> " + charFound + "=" + currChar);
+        }
+        return res;
     }
 
     // encontre n caracteres seguidos

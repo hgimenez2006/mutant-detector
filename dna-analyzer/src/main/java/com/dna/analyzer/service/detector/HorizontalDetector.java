@@ -14,23 +14,28 @@ public class HorizontalDetector implements SequenceDetector{
         return detect(currChar, sequenceSize);
     }
 
-    private int detect(char currChar, int sequenceSize){
+    private int detect(char currChar, int sequenceCount){
         if (charCount.isSameCharThanPrevious(currChar)){
             charCount.addCount();
             if (charCount.isSequenceFound()) {
-                sequenceSize++;
-                if (sequenceSize == mutantSequenceSize){
+                System.out.println("horizontal -> " + currChar);
+                sequenceCount++;
+                /*if (sequenceCount == mutantSequenceSize){
                     // we found a mutant sequence : n number of same characters together
-                    return sequenceSize;
-                }
+                    return sequenceCount;
+                }*/
                 charCount.reset();
+            }
+            else {
+                charCount.setCharFound(currChar);
             }
         }
         else{
             charCount.reset();
+            charCount.setCharFound(currChar);
         }
-        charCount.setCharFound(currChar);
-        return sequenceSize;
+
+        return sequenceCount;
     }
 
     public void nextRow(){

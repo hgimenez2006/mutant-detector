@@ -12,7 +12,92 @@ public class HumbleMutantDetectorTest {
     private MutantDetector mutantDetector = new HumbleMutantDetector();
 
     private boolean detectMutant(String[] dna) throws InvalidDnaException {
-        return mutantDetector.detectMutant(dna).isMutant();
+        DnaResult dnaResult = mutantDetector.detectMutant(dna);
+        return dnaResult.isMutant();
+    }
+
+    @Test
+    public void mutant_horizontal() throws InvalidDnaException {
+        String[] dna = new String[1];
+        dna[0] = "AAAAAAAA";
+        boolean res = detectMutant(dna);
+        assertTrue(res);
+    }
+
+    @Test
+    public void mutant_vertical_sameColumn() throws InvalidDnaException {
+        String[] dna = new String[8];
+        dna[0] = "A";
+        dna[1] = "A";
+        dna[2] = "A";
+        dna[3] = "A";
+
+        dna[4] = "A";
+        dna[5] = "A";
+        dna[6] = "A";
+        dna[7] = "A";
+
+        boolean res = detectMutant(dna);
+        assertTrue(res);
+    }
+
+    @Test
+    public void human_vertical() throws InvalidDnaException {
+        String[] dna = new String[8];
+        dna[0] = "A";
+        dna[1] = "A";
+        dna[2] = "A";
+        dna[3] = "A";
+
+        dna[4] = "A";
+        dna[5] = "A";
+        dna[6] = "A";
+        dna[7] = "C";
+
+        boolean res = detectMutant(dna);
+        Assert.assertFalse(res);
+    }
+
+    @Test
+    public void human_diagonal() throws InvalidDnaException {
+        String[] dna = new String[8];
+        dna[0] = "ATTCCATA";
+        dna[1] = "TACGGTCT";
+        dna[2] = "CGATACGC";
+        dna[3] = "GAAATGAG";
+
+        dna[4] = "ATCCAATA";
+        dna[5] = "TCGGGACT";
+        dna[6] = "CGAAACAC";
+        dna[7] = "GATTTGAG";
+
+        boolean res = detectMutant(dna);
+        Assert.assertFalse(res);
+    }
+
+    @Test
+    public void mutant_diagonalRigth_A() throws InvalidDnaException {
+        String[] dna = new String[8];
+        dna[0] = "ATTCCATA";
+        dna[1] = "TACGGTCT";
+        dna[2] = "CGATACGC";
+        dna[3] = "GAAATGAG";
+
+        dna[4] = "ATCCAATA";
+        dna[5] = "TCGGGACT";
+        dna[6] = "CGAAACAC";
+        dna[7] = "GATTTGAA";
+
+        boolean res = detectMutant(dna);
+        Assert.assertTrue(res);
+    }
+
+    @Test
+    public void human_() throws InvalidDnaException {
+        String[] dna = new String[1];
+        dna[0] = "AAAAAAA"; // falta un caracter para mutante
+        boolean res = detectMutant(dna);
+        Assert.assertFalse(res);
     }
 
     @Test
@@ -66,7 +151,7 @@ public class HumbleMutantDetectorTest {
     @Test
     public void human() throws InvalidDnaException {
         String[] dna = new String[5];
-        dna[0] = "ATCG";
+        dna[0] = "AAAA";
         dna[1] = "GATC";
         dna[2] = "CGAT";
         dna[3] = "TCTG";
