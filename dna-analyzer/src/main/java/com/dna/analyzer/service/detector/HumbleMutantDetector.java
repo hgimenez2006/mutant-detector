@@ -3,10 +3,10 @@ package com.dna.analyzer.service.detector;
 import com.dna.analyzer.exception.InvalidDnaException;
 import com.dna.analyzer.service.DnaResult;
 import com.dna.analyzer.service.MutantDetector;
+import com.dna.analyzer.service.detector.sequence.SequenceDetectorFactory;
 import com.dna.common.Environment;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.List;
 
 public class HumbleMutantDetector implements MutantDetector {
@@ -63,7 +63,7 @@ public class HumbleMutantDetector implements MutantDetector {
                     break;
                 }
             }
-            sequenceDetectors.stream().forEach(detector -> detector.nextRow());
+            sequenceDetectors.stream().forEach(detector -> detector.prepareForNextRow());
         }
 
         boolean isMutant = isSequenceCountReached(sequenceCount);

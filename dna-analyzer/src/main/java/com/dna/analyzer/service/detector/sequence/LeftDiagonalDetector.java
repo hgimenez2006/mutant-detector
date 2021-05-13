@@ -1,4 +1,4 @@
-package com.dna.analyzer.service.detector;
+package com.dna.analyzer.service.detector.sequence;
 
 public class LeftDiagonalDetector extends DiagonalDetector{
     public LeftDiagonalDetector(int mutantSequenceSize){

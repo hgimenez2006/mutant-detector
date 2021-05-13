@@ -1,9 +1,12 @@
-package com.dna.analyzer.service.detector;
+package com.dna.analyzer.service.detector.sequence;
+
+import com.dna.analyzer.service.detector.CharCount;
+import com.dna.analyzer.service.detector.SequenceDetector;
 
 import java.util.HashMap;
 import java.util.Map;
 
-abstract class DiagonalDetector implements SequenceDetector{
+abstract class DiagonalDetector implements SequenceDetector {
     private Map<Integer, CharCount> diagonalMatchesCurrRow = new HashMap<>();
     private Map<Integer, CharCount> diagonalMatchesPrevRow = new HashMap<>();
     private int mutantSequenceSize;
@@ -46,7 +49,7 @@ abstract class DiagonalDetector implements SequenceDetector{
         return sequenceCount;
     }
 
-    public void nextRow(){
+    public void prepareForNextRow(){
         diagonalMatchesPrevRow = diagonalMatchesCurrRow;
         diagonalMatchesCurrRow = new HashMap<>();
     }

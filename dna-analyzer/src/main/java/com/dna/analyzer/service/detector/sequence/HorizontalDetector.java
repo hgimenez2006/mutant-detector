@@ -1,6 +1,9 @@
-package com.dna.analyzer.service.detector;
+package com.dna.analyzer.service.detector.sequence;
 
-public class HorizontalDetector implements SequenceDetector{
+import com.dna.analyzer.service.detector.CharCount;
+import com.dna.analyzer.service.detector.SequenceDetector;
+
+public class HorizontalDetector implements SequenceDetector {
     private CharCount charCount;
     private int mutantSequenceSize;
 
@@ -38,7 +41,7 @@ public class HorizontalDetector implements SequenceDetector{
         return sequenceCount;
     }
 
-    public void nextRow(){
+    public void prepareForNextRow(){
         charCount = new CharCount(mutantSequenceSize);
     }
 }

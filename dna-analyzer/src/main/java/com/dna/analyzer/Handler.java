@@ -31,6 +31,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         } catch (InvalidDnaException e) {
             logger.log("Returing BAD_REQUEST :" + e.getMessage());
             response = new APIGatewayProxyResponseEvent();
+            response.setBody(e.getMessage());
             response.setStatusCode(HttpStatus.SC_BAD_REQUEST);
         }
         return response;
