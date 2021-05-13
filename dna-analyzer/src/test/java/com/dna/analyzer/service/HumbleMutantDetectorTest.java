@@ -1,14 +1,11 @@
 package com.dna.analyzer.service;
 
 import com.dna.analyzer.exception.InvalidDnaException;
+import com.dna.analyzer.service.detector.HumbleMutantDetector;
 import org.junit.Assert;
 import org.junit.Test;
-import org.apache.commons.lang3.RandomStringUtils;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import static org.junit.Assert.assertTrue;
 
 public class HumbleMutantDetectorTest {
 
@@ -18,145 +15,106 @@ public class HumbleMutantDetectorTest {
         return mutantDetector.detectMutant(dna).isMutant();
     }
 
-    //private static final String mongoUri = "mongodb+srv://horacio:mutantes2000@cluster0.7pfzt.mongodb.net/test?retryWrites=true&w=majority";
-
-    /*
     @Test
-    public void loadDataIntoMongo() throws IOException {
-        MongoClient client = MongoClients.create(mongoUri);
-        MongoDatabase database = client.getDatabase("dna");
-        MongoCollection<Document> dna = database.getCollection("dna");
-
-        boolean isMutant=false;
-        for (int i=0; i<100; i++) {
-            if (isMutant)
-                isMutant=false;
-            else
-                isMutant=true;
-
-            String dnaStr = createDna();
-            String key = new DnaIdBuilderSHA256().buildId(dnaStr);
-
-            Document document = new Document("_id", new ObjectId());
-            document.append("_id", key);
-            document.append("dna", dnaStr);
-            document.append("mutant", isMutant);
-            document.append("_class", "com.horacio.mutant.repository.DnaModel");
-            dna.insertOne(document);
-
-            System.out.println(i);
-        }
-    }
-
-    @Test
-    public void testMongo(){
-        MongoClient client = MongoClients.create(mongoUri);
-        MongoDatabase database = client.getDatabase("dna");
-        MongoCollection<Document> dna = database.getCollection("dna");
-        System.out.println(dna.countDocuments());
-    }*/
-
-//    @Test
-    public void testDAta() throws IOException {
-
-        Path path = Paths.get("request.txt");
-        Files.delete(path);
-        //Files.write(path, (new Gson().toJson(request)).getBytes());
-
-        //System.out.println(new Gson().toJson(request));
-    }
-
-    private String createDna(){
-        int size = 1000;
-        StringBuilder str = new StringBuilder();
-
-        for (int i=0; i<size; i++){
-            str.append(RandomStringUtils.randomAlphabetic(size).toUpperCase());
-        }
-
-        return str.toString();
-    }
-
-    @Test
-    public void test1() throws InvalidDnaException {
-        // APACHE commons
-        // uno en horizontal, uno en vertical
+    public void mutant_horizontal_vertical() throws InvalidDnaException {
         String[] dna = new String[5];
-        dna[0] = "AAAAAA";
-        dna[1] = "XOXOXO";
-        dna[2] = "XBTBTB";
-        dna[3] = "XOXOXO";
-        dna[4] = "XBTBTB";
+        dna[0] = "GAAAAA";
+        dna[1] = "CTCTCG";
+        dna[2] = "CGCGTA";
+        dna[3] = "CTGTAC";
+        dna[4] = "CGCGTA";
+
         boolean res = detectMutant(dna);
-        Assert.assertTrue(res);
+        assertTrue(res);
     }
 
     @Test
-    public void test2()  throws InvalidDnaException {
-        // dos en diagonal 1
-        String[] dna = new String[5];
-        dna[0] = "ABCDT";
-        dna[1] = "DABCD";
-        dna[2] = "CDADB";
-        dna[3] = "BCDAM";
-        dna[4] = "ADCDM";
+    public void mutant_both_diagonals()  throws InvalidDnaException {
+        String[] dna = new String[4];
+        dna[0] = "GACT";
+        dna[1] = "AGTT";
+        dna[2] = "CTGT";
+        dna[3] = "TACG";
         boolean res = detectMutant(dna);
-        Assert.assertTrue(res);
+        assertTrue(res);
     }
 
     @Test
-    public void test3() throws InvalidDnaException {
-        // dos en diagional 1
+    public void mutant_diagonal1() throws InvalidDnaException {
         String[] dna = new String[5];
-        dna[0] = "ABCD";
-        dna[1] = "DABC";
-        dna[2] = "CDAB";
-        dna[3] = "BCDA";
-        dna[4] = "ABCD";
+        dna[0] = "ATCGT";
+        dna[1] = "GATCC";
+        dna[2] = "CGATG";
+        dna[3] = "TCGAT";
+        dna[4] = "ATCTC";
         boolean res = detectMutant(dna);
-        Assert.assertTrue(res);
+        assertTrue(res);
     }
 
     @Test
-    public void test4() throws InvalidDnaException {
+    public void mutant_diagonal2() throws InvalidDnaException {
         String[] dna = new String[5];
-        dna[0] = "ABCD";
-        dna[1] = "DABC";
-        dna[2] = "CDAB";
-        dna[3] = "BCTX";
-        dna[4] = "ABCD";
+        dna[0] = "ATCC";
+        dna[1] = "GACA";
+        dna[2] = "CCAT";
+        dna[3] = "CACG";
+        dna[4] = "ATCG";
         boolean res = detectMutant(dna);
-        Assert.assertFalse(res);
-
+        assertTrue(res);
     }
 
     @Test
-    public void test5() throws InvalidDnaException {
-        // dos en vertical
+    public void human() throws InvalidDnaException {
         String[] dna = new String[5];
-        dna[0] = "ABCM";
-        dna[1] = "AABD";
-        dna[2] = "ADAD";
-        dna[3] = "ACTD";
-        dna[4] = "ABCD";
-        boolean res = detectMutant(dna);
-        Assert.assertTrue(res);
-
-    }
-
-    @Test
-    public void test6() throws InvalidDnaException {
-        String[] dna = new String[5];
-        dna[0] = "ABCM";
-        dna[1] = "DAMD";
-        dna[2] = "CMAX";
-        dna[3] = "MCDR";
-        dna[4] = "ABCD";
+        dna[0] = "ATCG";
+        dna[1] = "GATC";
+        dna[2] = "CGAT";
+        dna[3] = "TCTG";
+        dna[4] = "ATCG";
         boolean res = detectMutant(dna);
         Assert.assertFalse(res);
     }
 
     @Test
+    public void mutant_vertical() throws InvalidDnaException {
+        String[] dna = new String[5];
+        dna[0] = "ACCTG";
+        dna[1] = "AATGC";
+        dna[2] = "AGAGA";
+        dna[3] = "ACTGT";
+        dna[4] = "ATCGG";
+        boolean res = detectMutant(dna);
+        assertTrue(res);
+    }
+
+    @Test
+    public void human2() throws InvalidDnaException {
+        String[] dna = new String[5];
+        dna[0] = "ATCA";
+        dna[1] = "AAAT";
+        dna[2] = "CAAT";
+        dna[3] = "ACCG";
+        dna[4] = "AACG";
+        boolean res = detectMutant(dna);
+        Assert.assertFalse(res);
+    }
+
+    @Test
+    public void invalid_dna(){
+        String[] dna = new String[4];
+        dna[0] = "AXCA";
+        dna[1] = "AAAT";
+        dna[2] = "CAAT";
+        dna[3] = "ACCG";
+
+        InvalidDnaException invalidDnaException = Assert.assertThrows(InvalidDnaException.class, () -> {
+            detectMutant(dna);
+        });
+
+        Assert.assertEquals("Char not valid found : X", invalidDnaException.getMessage());
+    }
+
+    /*@Test
     public void test7() throws InvalidDnaException {
         String[] dna = new String[4];
 
@@ -165,7 +123,7 @@ public class HumbleMutantDetectorTest {
         dna[2] = "KGKG";
         dna[3] = "GUTX";
         boolean res = detectMutant(dna);
-        Assert.assertTrue(res);
+        assertTrue(res);
     }
 
     @Test
@@ -177,7 +135,7 @@ public class HumbleMutantDetectorTest {
         dna[2] = "KGKG";
         dna[3] = "GUTX";
         boolean res = detectMutant(dna);
-        Assert.assertTrue(res);
-    }
+        assertTrue(res);
+    }*/
 
 }

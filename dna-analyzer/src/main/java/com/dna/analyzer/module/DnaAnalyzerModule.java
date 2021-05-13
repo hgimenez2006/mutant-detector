@@ -3,7 +3,7 @@ package com.dna.analyzer.module;
 import com.dna.analyzer.sender.DnaSender;
 import com.dna.analyzer.sender.DnaSqsSender;
 import com.dna.analyzer.sender.AmazonSqsFactory;
-import com.dna.analyzer.service.HumbleMutantDetector;
+import com.dna.analyzer.service.detector.HumbleMutantDetector;
 import com.dna.analyzer.service.MutantDetector;
 import com.dna.analyzer.service.DnaService;
 import com.google.inject.AbstractModule;
