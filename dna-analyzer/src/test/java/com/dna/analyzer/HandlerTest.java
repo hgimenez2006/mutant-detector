@@ -1,5 +1,6 @@
 package com.dna.analyzer;
 
+import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
@@ -9,8 +10,38 @@ import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class HandlerTest {
+    @Mock
+    Context context;
+    @Mock
+    LambdaLogger lambdaLogger;
+
+    @Test
+    public void handleRequest_badRequest(){
+        APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent = new APIGatewayProxyRequestEvent();
+        Handler handler = new Handler();
+        Mockito.when(context.getLogger()).thenReturn(lambdaLogger);
+        APIGatewayProxyResponseEvent response = handler.handleRequest(apiGatewayProxyRequestEvent, context);
+        Assert.assertEquals(HttpStatus.SC_BAD_REQUEST, response.getStatusCode().intValue());
+    }
+
+   /* @Test
+    public void handleRequest_ok(){
+        APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent = new APIGatewayProxyRequestEvent();
+        Handler handler = Mockito.spy(Handler.class);
+        Mockito.doReturn().when(handler).handleRequest();
+
+        Mockito.when(context.getLogger()).thenReturn(lambdaLogger);
+        APIGatewayProxyResponseEvent response = handler.handleRequest(apiGatewayProxyRequestEvent, context);
+        Assert.assertEquals(HttpStatus.SC_BAD_REQUEST, response.getStatusCode().intValue());
+        //verify(lambdaLogger).log();
+    }*/
 
     @Test
     public void getResponse_Mutant(){

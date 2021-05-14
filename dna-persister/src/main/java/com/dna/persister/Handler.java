@@ -35,7 +35,7 @@ public class Handler implements RequestHandler<SQSEvent, Void> {
 
     // TODO: ver si se puede recibir el mensaje transparentemente en lugar de ir a buscarlo a s3
     // https://docs.aws.amazon.com/sns/latest/dg/large-message-payloads.html
-    private void handleMessage(SQSEvent.SQSMessage sqsMessage) throws IOException {
+    protected void handleMessage(SQSEvent.SQSMessage sqsMessage) throws IOException {
         System.out.println("body=" + sqsMessage.getBody());
         dnaPersisterService.processAndSaveMessage(sqsMessage.getBody());
     }

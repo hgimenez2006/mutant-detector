@@ -27,28 +27,11 @@ public class DnaPersisterService {
         dnaRepository.insertDnaResult(dnaResult);
     }
 
-   /*public Stats getStats(){
-        long humanCount = dnaRepository.getHumanCount();
-        long mutantCount = dnaRepository.getMutantCount();
-        float ratio = mutantCount;
-        if (humanCount > 0){
-           ratio = (float)mutantCount/humanCount;
-        }
-
-        Stats stats = Stats.builder()
-                .count_human_dna(humanCount)
-                .count_mutant_dna(mutantCount)
-                .ratio(ratio)
-                .build();
-
-        return stats;
-    }*/
-
     private DnaResult getDnaResult(String msgBody) throws IOException {
         String dnaResultJson;
         if (msgBody.contains(Handler.SQS_MSG_BUCKET_NAME)){
             // get dna result from s3 file
-            dnaResultJson = retrieveContent(msgBody);
+            dnaResultJson = retrieveContentFromS3(msgBody);
         }
         else{
             dnaResultJson = msgBody;
@@ -57,10 +40,9 @@ public class DnaPersisterService {
         return dnaResult;
     }
 
-    private String retrieveContent(String msgBody) throws IOException {
-        int start = msgBody.indexOf(Handler.SQS_MSG_BUCKET_NAME)-2;
-        int end = msgBody.length()-1;
-        String s3MessageJson = msgBody.substring(start, end);
+    private String retrieveContentFromS3(String msgBody) throws IOException {
+        String s3MessageJson = msgBody.substring(msgBody.indexOf(Handler.SQS_MSG_BUCKET_NAME)-2,
+                msgBody.length()-1);
         S3Message s3Message = new Gson().fromJson(s3MessageJson, S3Message.class);
 
         String s3Content = s3Repository.getFileContent(s3Message.getS3BucketName(), s3Message.getS3Key());

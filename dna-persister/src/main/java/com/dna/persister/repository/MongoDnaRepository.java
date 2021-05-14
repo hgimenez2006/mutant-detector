@@ -45,14 +45,7 @@ public class MongoDnaRepository implements DnaRepository{
     @Override
     public void insertDnaResult(DnaResult dnaResult) {
         MongoDatabase mongoDatabase = getMongoDatabase();
-
-        String id = dnaKeyBuilder.buildId(dnaResult.getDna());
-
-        Document document = new Document();
-        document.append("_id", id);
-        document.append("createdAt", new Date());
-        document.append("dna", dnaResult.getDna());
-
+        Document document = buildDocument(dnaResult);
         String collectionName = dnaResult.isMutant() ? MUTANT_COLLECTION : HUMAN_COLLECTION;
 
         try {
@@ -68,6 +61,17 @@ public class MongoDnaRepository implements DnaRepository{
                 throw e;
             }
         }
+    }
+
+    protected Document buildDocument(DnaResult dnaResult) {
+        String id = dnaKeyBuilder.buildKey(dnaResult.getDna());
+
+        Document document = new Document();
+        document.append("_id", id);
+        document.append("createdAt", new Date());
+        document.append("dna", dnaResult.getDna());
+
+        return document;
     }
 
     private void insertDocument(MongoDatabase mongoDatabase, String collectionName, Document document){

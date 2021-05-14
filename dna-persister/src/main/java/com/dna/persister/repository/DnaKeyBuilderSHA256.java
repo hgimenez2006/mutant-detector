@@ -6,11 +6,10 @@ import java.nio.charset.StandardCharsets;
 
 public class DnaKeyBuilderSHA256 implements DnaKeyBuilder {
     @Override
-    public String buildId(String dna){
-        String key = Hashing.sha256()
+    public String buildKey(String dna){
+        return Hashing
+                .sha256()
                 .hashString(dna, StandardCharsets.UTF_8)
                 .toString();
-
-        return key;
     }
 }
