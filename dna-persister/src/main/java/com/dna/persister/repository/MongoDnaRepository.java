@@ -9,51 +9,46 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Date;
 
 public class MongoDnaRepository implements DnaRepository{
-    private static String DEFAULT_URL = "mongodb+srv://horacio:mutantes2000@cluster0.7pfzt.mongodb.net/test?retryWrites=true&w=majority";
-    private static final String DEFAULT_DB_NAME = "dna";
     private static final String MUTANT_COLLECTION = "mutant";
     private static final String HUMAN_COLLECTION = "human";
 
-    private final DnaKeyBuilder dnaKeyBuilder; // = new DnaKeyBuilderSHA256();
-
-    //@Named("${mongodb.url}")
-    private String defaultMongoDbUrl;
-    //@Named("mongodb.dbName")
-    private String defaultMongoDbName;
+    private final DnaKeyBuilder dnaKeyBuilder;
+    private String url;
     private String dbName;
-    private MongoClientURI uri;
+    private MongoDatabase mongoDatabase;
 
     @Inject
-    public MongoDnaRepository(final DnaKeyBuilder dnaKeyBuilder) {
+    public MongoDnaRepository(final DnaKeyBuilder dnaKeyBuilder,
+                              @Named("mongodb.url") final String url,
+                              @Named("mongodb.dbName") final String dbName) {
         this.dnaKeyBuilder = dnaKeyBuilder;
-        this.dbName = Environment.getInstance().get(Environment.Variable.DB_NAME, DEFAULT_DB_NAME);
-        String url = Environment.getInstance().get(Environment.Variable.DB_URL, DEFAULT_URL);
-        this.uri = new MongoClientURI(url);
-        //createNewDatabaseConnection(uri, dbName);
+        this.url = Environment.getInstance().get(Environment.Variable.DB_URL, url);
+        this.dbName = Environment.getInstance().get(Environment.Variable.DB_NAME, dbName);
+
+        this.mongoDatabase = connectAndGetDatabase();
     }
 
-    private MongoDatabase getMongoDatabase(){
+    private MongoDatabase connectAndGetDatabase(){
         // TODO: try this
         //MongoClientOptions.builder().maxConnectionIdleTime() // miliseconds
-        MongoClient mongoClient = new MongoClient(uri);
+        MongoClient mongoClient = new MongoClient(new MongoClientURI(url));
         return mongoClient.getDatabase(dbName);
     }
 
     @Override
     public void insertDnaResult(DnaResult dnaResult) {
-        MongoDatabase mongoDatabase = getMongoDatabase();
         Document document = buildDocument(dnaResult);
         String collectionName = dnaResult.isMutant() ? MUTANT_COLLECTION : HUMAN_COLLECTION;
 
         try {
             insertDocument(mongoDatabase, collectionName, document);
-            //TODO: check this to catch only duplicate key exceptions
         } catch (IllegalStateException e) {
             // connection was closed
-            mongoDatabase = getMongoDatabase();
+            mongoDatabase = connectAndGetDatabase();
             insertDocument(mongoDatabase, collectionName, document);
         } catch (com.mongodb.MongoWriteException e) {
             if (ErrorCategory.fromErrorCode(e.getCode()) != ErrorCategory.DUPLICATE_KEY) {

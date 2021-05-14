@@ -18,6 +18,12 @@
             <artifactId>dna-common</artifactId>
             <version>1.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.horacio</groupId>
+            <artifactId>dna-common</artifactId>
+            <version>1.0</version>
+        </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>

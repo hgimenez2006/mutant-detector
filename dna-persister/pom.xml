@@ -23,6 +23,12 @@
             <artifactId>mongo-java-driver</artifactId>
             <version>3.12.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.11.238</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -29,7 +29,7 @@ public class Environment {
     public String get(Variable variable){
         String value = env.get(variable);
         if (value == null){
-            throw new RuntimeException("Env variable not found");
+            throw new RuntimeException("Environment variable not found and NO DEFAULT value assigned");
         }
         return  value;
     }

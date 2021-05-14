@@ -12,9 +12,7 @@ import com.google.inject.Injector;
 
 import java.io.IOException;
 
-public class Handler implements RequestHandler<SQSEvent, Void> {
-    public final static String SQS_MSG_BUCKET_NAME = "s3BucketName";
-
+public class PersisterHandler implements RequestHandler<SQSEvent, Void> {
     private Injector injector = Guice.createInjector(new DnaPersisterModule());
     private DnaPersisterService dnaPersisterService = injector.getInstance(DnaPersisterService.class);
 
