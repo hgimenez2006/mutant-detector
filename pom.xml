@@ -188,6 +188,8 @@
                     <excludes>
                         com/dna/persister/Handler.class,
                         com/dna/persister/repository/MongoDnaRepository.class,
+                        com/dna/stats/Handler.class,
+                        com/dna/stats/repository/MongoDnaRepository.class,
                         com/dna/persister/s3/S3Repository.class
                     </excludes>
                 </configuration>
