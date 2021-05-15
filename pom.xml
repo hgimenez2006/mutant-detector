@@ -9,6 +9,7 @@
         <module>dna-common</module>
         <module>dna-persister</module>
         <module>dna-stats</module>
+        <module>dna-integration-test</module>
     </modules>
     <groupId>com.horacio</groupId>
     <artifactId>mutant-detector</artifactId>
@@ -218,9 +219,9 @@
                 <version>0.8.6</version>
                 <configuration>
                     <excludes>
-                        com/dna/persister/Handler.class,
+                        com/dna/persister/PersisterHandler.class,
                         com/dna/persister/repository/MongoDnaRepository.class,
-                        com/dna/stats/Handler.class,
+                        com/dna/stats/StatsHandler.class,
                         com/dna/stats/repository/MongoDnaRepository.class,
                         com/dna/persister/s3/S3Repository.class
                     </excludes>

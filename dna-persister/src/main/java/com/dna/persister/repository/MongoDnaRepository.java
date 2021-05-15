@@ -3,6 +3,7 @@ package com.dna.persister.repository;
 import com.dna.persister.service.DnaResult;
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -32,8 +33,8 @@ public class MongoDnaRepository implements DnaRepository{
 
     private MongoDatabase connectAndGetDatabase(){
         // TODO: try this
-        //MongoClientOptions.builder().maxConnectionIdleTime() // miliseconds
-        MongoClient mongoClient = new MongoClient(new MongoClientURI(url));
+        MongoClientOptions.Builder mongoClientOptions = MongoClientOptions.builder().maxConnectionIdleTime(60000);//.build(); // miliseconds
+        MongoClient mongoClient = new MongoClient(new MongoClientURI(url, mongoClientOptions));
         return mongoClient.getDatabase(dbName);
     }
 

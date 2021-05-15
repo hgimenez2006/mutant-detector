@@ -12,7 +12,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.apache.http.HttpStatus;
 
-public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public class StatsHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
     private Injector injector = Guice.createInjector(new StatsDnaModule());
     private StatsService statsService = injector.getInstance(StatsService.class);
 

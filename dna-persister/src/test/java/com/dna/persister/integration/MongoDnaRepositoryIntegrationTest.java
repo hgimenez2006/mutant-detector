@@ -18,6 +18,8 @@ public class MongoDnaRepositoryIntegrationTest {
         MongoDnaRepository mongoDnaRepository = injector.getInstance(MongoDnaRepository.class);
         DnaResult dnaResult = DnaResult.builder().mutant(true).dna("AAAA").build();
         mongoDnaRepository.insertDnaResult(dnaResult);
+
+        mongoDnaRepository.insertDnaResult(dnaResult);
     }
 
 }
