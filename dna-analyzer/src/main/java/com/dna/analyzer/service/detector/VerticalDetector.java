@@ -19,7 +19,7 @@ public class VerticalDetector implements SequenceDetector {
             verticalMatches.put(colIndex, verticalCount);
         }
 
-        boolean sequenceDetected = CharCountProcessor.processCharCount(verticalCount, currChar);
+        boolean sequenceDetected = CharCountProcessor.processCurrentChar(verticalCount, currChar);
         return sequenceDetected;
     }
 }

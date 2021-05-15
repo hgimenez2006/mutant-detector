@@ -23,7 +23,7 @@ abstract class DiagonalDetector implements SequenceDetector {
         }
 
         diagonalMatchesCurrRow.put(colIndex, diagonalCount);
-        boolean sequenceDetected = CharCountProcessor.processCharCount(diagonalCount, currChar);
+        boolean sequenceDetected = CharCountProcessor.processCurrentChar(diagonalCount, currChar);
 
         if (colIndex == (rowSize-1)){
             // end of row reached

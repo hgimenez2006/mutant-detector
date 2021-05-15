@@ -11,7 +11,7 @@ public class HorizontalDetector implements SequenceDetector {
 
     @Override
     public boolean detect(int colIndex, char currChar, int rowSize) {
-        boolean sequenceDetected = CharCountProcessor.processCharCount(horizontalCount, currChar);
+        boolean sequenceDetected = CharCountProcessor.processCurrentChar(horizontalCount, currChar);
 
         if (colIndex == (rowSize-1)){
             prepareForNextRow();

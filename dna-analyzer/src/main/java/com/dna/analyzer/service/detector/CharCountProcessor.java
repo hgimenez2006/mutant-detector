@@ -2,7 +2,7 @@ package com.dna.analyzer.service.detector;
 
 public class CharCountProcessor {
 
-    protected static boolean processCharCount(CharCount charCount, char currChar) {
+    protected static boolean processCurrentChar(CharCount charCount, char currChar) {
         boolean sequenceDetected = false;
         if (charCount.isSameCharThanPrevious(currChar)) {
             charCount.addCount();
