@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class CharCount {
     private char charFound;
-    private int count;
-    private int mutantSequenceSize; // equal characters to be a mutant
+    private int count; // count of same characters found in sequence
+    private int mutantSequenceSize; // amount of characters to be a mutant
 
     public CharCount(int mutantSequenceSize){
         this.count = 1;
