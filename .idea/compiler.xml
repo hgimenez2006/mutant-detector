@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="dna-common" />
         <module name="dna-analyzer" />
+        <module name="dna-integration-test" />
         <module name="dna-stats" />
         <module name="dna-persister" />
       </profile>
