@@ -12,14 +12,12 @@ public class HorizontalDetector implements SequenceDetector {
     @Override
     public boolean detect(int colIndex, char currChar, int rowSize) {
         boolean sequenceDetected=false;
+
         if (charCount.isSameCharThanPrevious(currChar)){
             charCount.addCount();
             if (charCount.isSequenceFound()) {
                 sequenceDetected = true;
                 charCount.reset();
-            }
-            else {
-                charCount.setCharFound(currChar);
             }
         }
         else{

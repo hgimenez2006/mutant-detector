@@ -16,30 +16,30 @@ abstract class DiagonalDetector implements SequenceDetector {
 
     @Override
     public boolean detect(int colIndex, char currChar, int rowSize){
-        int index = isRigthDiagonal()? colIndex-1 : colIndex+1;
-        CharCount diagonalCount = diagonalMatchesPrevRow.get(index);
+        int index = isRigthDiagonal() ? colIndex-1 : colIndex+1;
         boolean sequenceDetected=false;
 
-        if (diagonalCount != null){
-            if (diagonalCount.isSameCharThanPrevious(currChar)){
-                diagonalCount.addCount();
-                if (diagonalCount.isSequenceFound()) {
-                    sequenceDetected = true;
-                    diagonalCount.reset();
-                }
-            }
-            else{
-                diagonalCount = new CharCount(mutantSequenceSize);
-                diagonalCount.setCharFound(currChar);
+        CharCount diagonalCount = diagonalMatchesPrevRow.get(index);
+        if (diagonalCount == null){
+            diagonalCount = new CharCount(mutantSequenceSize);
+        }
+
+        if (diagonalCount.isSameCharThanPrevious(currChar)){
+            diagonalCount.addCount();
+            if (diagonalCount.isSequenceFound()) {
+                sequenceDetected = true;
+                diagonalCount.reset();
             }
         }
-        else{
-            diagonalCount = new CharCount(mutantSequenceSize);
+        else {
+            diagonalCount.reset();
             diagonalCount.setCharFound(currChar);
         }
+
         diagonalMatchesCurrRow.put(colIndex, diagonalCount);
 
         if (colIndex == (rowSize-1)){
+            // end of row reached
             prepareForNextRow();
         }
 

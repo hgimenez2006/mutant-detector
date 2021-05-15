@@ -14,24 +14,21 @@ public class VerticalDetector implements SequenceDetector {
     @Override
     public boolean detect(int colIndex, char currChar, int rowSize){
         boolean sequenceDetected = false;
+
         CharCount verticalCount = verticalMatches.get(colIndex);
-        if (verticalCount != null){
-
-            if (verticalCount.isSameCharThanPrevious(currChar)){
-                verticalCount.addCount();
-                verticalCount.setCharFound(currChar);
-
-                if (verticalCount.isSequenceFound()) {
-                    sequenceDetected = true;
-                    verticalCount.reset();
-                }
-            }
-            else{
-                verticalCount.setCharFound(currChar);
-            }
-        }else{
-            // la primera row que verifica carga toda la row , un CharCount por c/columna
+        if (verticalCount == null){
             verticalCount = new CharCount(mutantSequenceSize);
+        }
+
+        if (verticalCount.isSameCharThanPrevious(currChar)){
+            verticalCount.addCount();
+            if (verticalCount.isSequenceFound()) {
+                sequenceDetected = true;
+                verticalCount.reset();
+            }
+        }
+        else{
+            verticalCount.reset();
             verticalCount.setCharFound(currChar);
         }
 
