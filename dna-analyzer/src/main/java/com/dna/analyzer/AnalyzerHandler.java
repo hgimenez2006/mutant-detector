@@ -16,7 +16,7 @@ import com.google.inject.Injector;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 
-public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public class AnalyzerHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
     private Injector injector = Guice.createInjector(new DnaAnalyzerModule());
     private DnaService dnaService = injector.getInstance(DnaService.class);
 

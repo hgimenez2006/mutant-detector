@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 //@RunWith(MockitoJUnitRunner.class)
@@ -27,9 +28,10 @@ public class DnaSqsSenderTest{
         //when(amazonSqsFactory.getAmazonSqs()).thenReturn(amazonSQSExtendedClient);
     }
 
-    //@Test
+    //@Test --> NO ANDA
     public void sendAnalyzedDnaToPersister() {
-        when(amazonSqsFactory.getAmazonSqs()).thenReturn(amazonSQSExtendedClient);
+        when(amazonSqsFactory.getAmazonSqs(any(String.class), any(String.class)))
+                .thenReturn(amazonSQSExtendedClient);
         DnaResult dnaResult = DnaResult.builder().mutant(true).dna("X").build();
         dnaSqsSender.sendAnalyzedDnaToPersister(dnaResult);
     }

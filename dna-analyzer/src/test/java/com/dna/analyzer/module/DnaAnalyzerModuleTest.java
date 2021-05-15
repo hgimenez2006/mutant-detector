@@ -5,7 +5,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.Test;
 
-@Deprecated
 public class DnaAnalyzerModuleTest {
     @Test
     public void module(){

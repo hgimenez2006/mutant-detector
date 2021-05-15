@@ -10,7 +10,18 @@ public class PropertyLoader {
         try{
             Properties properties = new Properties();
             properties.load(module.getClass().getClassLoader().getResourceAsStream("app.properties"));
+
+            // override properties values with environment variable if exists
+            properties.stringPropertyNames().stream()
+                    .forEach(property -> {
+                        String systemProperty = System.getenv(property);
+                        if (systemProperty != null){
+                            properties.setProperty(property, systemProperty);
+                        }
+                    });
+
             return properties;
+
         } catch (IOException e){
             throw new RuntimeException("Could not load properties file");
         }

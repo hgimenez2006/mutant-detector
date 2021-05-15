@@ -7,17 +7,20 @@ import com.dna.common.Environment;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public class DnaSqsSender implements DnaSender {
-    private final String sqsUrl = Environment.getInstance()
-            .get(Environment.Variable.SQS_URL,
-                    "https://sqs.us-east-1.amazonaws.com/276662393644/s3_events");
-
     private AmazonSQS amazonSQS;
+    private String sqsUrl;
 
     @Inject
-    public DnaSqsSender(AmazonSqsFactory amazonSqsFactory){
-        amazonSQS = amazonSqsFactory.getAmazonSqs();
+    public DnaSqsSender(@Named("aws_region") final String awsRegion,
+                        @Named("sqs_url") final String sqsUrl,
+                        @Named("s3_bucket") String s3bucket,
+                        final AmazonSqsFactory amazonSqsFactory){
+        this.sqsUrl = sqsUrl;
+        s3bucket = s3bucket;
+        this.amazonSQS = amazonSqsFactory.getAmazonSqs(awsRegion, s3bucket);
     }
 
     @Override

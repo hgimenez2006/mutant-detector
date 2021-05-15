@@ -7,7 +7,7 @@ import com.dna.analyzer.service.HumbleMutantDetector;
 import com.dna.analyzer.service.MutantDetector;
 import com.google.inject.AbstractModule;
 
-public class DnaAnalyzerModule extends AbstractModule {
+public class DnaAnalyzerModuleMock extends AbstractModule {
     @Override
     protected void configure() {
         bind(MutantDetector.class).to(HumbleMutantDetector.class);

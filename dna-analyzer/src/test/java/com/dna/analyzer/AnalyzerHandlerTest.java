@@ -17,7 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class HandlerTest {
+public class AnalyzerHandlerTest {
     @Mock
     Context context;
     @Mock
@@ -26,58 +26,58 @@ public class HandlerTest {
     @Test
     public void handleRequest_badRequest(){
         APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent = new APIGatewayProxyRequestEvent();
-        Handler handler = new Handler();
+        AnalyzerHandler analyzerHandler = new AnalyzerHandler();
         Mockito.when(context.getLogger()).thenReturn(lambdaLogger);
-        APIGatewayProxyResponseEvent response = handler.handleRequest(apiGatewayProxyRequestEvent, context);
+        APIGatewayProxyResponseEvent response = analyzerHandler.handleRequest(apiGatewayProxyRequestEvent, context);
         Assert.assertEquals(HttpStatus.SC_BAD_REQUEST, response.getStatusCode().intValue());
     }
 
     @Test
     public void handleRequest_ok(){
         APIGatewayProxyRequestEvent requestEvent = EventLoader.loadApiGatewayRestEvent("apigw_rest_event.json");
-        Handler handler = new Handler();
+        AnalyzerHandler analyzerHandler = new AnalyzerHandler();
         Mockito.when(context.getLogger()).thenReturn(lambdaLogger);
-        APIGatewayProxyResponseEvent response = handler.handleRequest(requestEvent, context);
+        APIGatewayProxyResponseEvent response = analyzerHandler.handleRequest(requestEvent, context);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatusCode().intValue());
     }
 
     @Test
     public void getResponse_Mutant(){
         DnaResult dnaResult = new DnaResult(true, "AAAABBBBCFDAFRTE");
-        Handler handler = new Handler();
-        APIGatewayProxyResponseEvent response = handler.getResponse(dnaResult);
+        AnalyzerHandler analyzerHandler = new AnalyzerHandler();
+        APIGatewayProxyResponseEvent response = analyzerHandler.getResponse(dnaResult);
         Assertions.assertEquals(HttpStatus.SC_OK, response.getStatusCode());
     }
 
     @Test
     public void getResponse_Human(){
         DnaResult dnaResult = new DnaResult(false, "ALAABCBBCFDAFRTE");
-        Handler handler = new Handler();
-        APIGatewayProxyResponseEvent response = handler.getResponse(dnaResult);
+        AnalyzerHandler analyzerHandler = new AnalyzerHandler();
+        APIGatewayProxyResponseEvent response = analyzerHandler.getResponse(dnaResult);
         Assertions.assertEquals(HttpStatus.SC_FORBIDDEN, response.getStatusCode());
     }
 
     @Test
     public void handleRequest_emptyBody(){
-        Handler handler = new Handler();
+        AnalyzerHandler analyzerHandler = new AnalyzerHandler();
         Assert.assertThrows(InvalidDnaException.class, () -> {
-            handler.handleRequestPlease("");
+            analyzerHandler.handleRequestPlease("");
         });
     }
 
     @Test
     public void handleRequest_malformedJson(){
-        Handler handler = new Handler();
+        AnalyzerHandler analyzerHandler = new AnalyzerHandler();
         Assert.assertThrows(InvalidDnaException.class, () -> {
-            handler.handleRequestPlease("xx");
+            analyzerHandler.handleRequestPlease("xx");
         });
     }
 
     @Test
     public void handleRequest_invalidJson(){
-        Handler handler = new Handler();
+        AnalyzerHandler analyzerHandler = new AnalyzerHandler();
         Assert.assertThrows(InvalidDnaException.class, () -> {
-            handler.handleRequestPlease("{}");
+            analyzerHandler.handleRequestPlease("{}");
         });
     }
 }
