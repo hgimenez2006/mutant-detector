@@ -1,6 +1,5 @@
 package com.dna.persister.repository;
 
-import com.dna.common.Environment;
 import com.dna.persister.service.DnaResult;
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoClient;
@@ -23,12 +22,11 @@ public class MongoDnaRepository implements DnaRepository{
 
     @Inject
     public MongoDnaRepository(final DnaKeyBuilder dnaKeyBuilder,
-                              @Named("mongodb.url") final String url,
-                              @Named("mongodb.dbName") final String dbName) {
+                              @Named("mongodb_url") final String url,
+                              @Named("mongodb_dbName") final String dbName) {
         this.dnaKeyBuilder = dnaKeyBuilder;
-        this.url = Environment.getInstance().get(Environment.Variable.DB_URL, url);
-        this.dbName = Environment.getInstance().get(Environment.Variable.DB_NAME, dbName);
-
+        this.url = url;
+        this.dbName = dbName;
         this.mongoDatabase = connectAndGetDatabase();
     }
 

@@ -23,7 +23,7 @@ public class PropertyLoader {
             return properties;
 
         } catch (IOException e){
-            throw new RuntimeException("Could not load properties file");
+            throw new RuntimeException("Error loading properties", e);
         }
     }
 }

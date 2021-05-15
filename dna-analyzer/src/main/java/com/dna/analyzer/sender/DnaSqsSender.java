@@ -3,7 +3,6 @@ package com.dna.analyzer.sender;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.dna.analyzer.service.DnaResult;
-import com.dna.common.Environment;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;

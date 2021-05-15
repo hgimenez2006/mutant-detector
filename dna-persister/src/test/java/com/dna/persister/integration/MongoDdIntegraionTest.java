@@ -1,6 +1,5 @@
-package com.dna.persister.module;
+package com.dna.persister.integration;
 
-import com.dna.common.Environment;
 import com.mongodb.BasicDBObject;
 import com.mongodb.ClientSessionOptions;
 import com.mongodb.ErrorCategory;
@@ -26,13 +25,13 @@ public class MongoDdIntegraionTest {
     private static String DEFAULT_URL = "mongodb+srv://horacio:mutantes2000@cluster0.7pfzt.mongodb.net/test?retryWrites=true&w=majority";
     private static final String DEFAULT_DB_NAME = "dna";
 
-    String url = Environment.getInstance().get(Environment.Variable.DB_URL, DEFAULT_URL);
-    String dbName = Environment.getInstance().get(Environment.Variable.DB_NAME, DEFAULT_DB_NAME);
+    String url = null; //Environment.getInstance().get(Environment.Variable.DB_URL, DEFAULT_URL);
+    String dbName = null; //Environment.getInstance().get(Environment.Variable.DB_NAME, DEFAULT_DB_NAME);
 
     //@Test
     public void test() {
-        String url = Environment.getInstance().get(Environment.Variable.DB_URL, DEFAULT_URL);
-        String dbName = Environment.getInstance().get(Environment.Variable.DB_NAME, DEFAULT_DB_NAME);
+        //String url = Environment.getInstance().get(Environment.Variable.DB_URL, DEFAULT_URL);
+        //String dbName = Environment.getInstance().get(Environment.Variable.DB_NAME, DEFAULT_DB_NAME);
 
         odit();
         odit();

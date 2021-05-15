@@ -49,15 +49,12 @@ public class AnalyzerHandler implements RequestHandler<APIGatewayProxyRequestEve
             throw new InvalidDnaException("Request body is empty");
         }
 
+        DnaRequest mutantRequest;
         try {
-            DnaRequest mutantRequest = new Gson().fromJson(requestBody, DnaRequest.class);
-            /*if (mutantRequest == null) {
-                throw new InvalidDnaException("Request format is invalid");
-            }*/
-            return dnaService.analyzeDnaAndSendResult(mutantRequest.getDna());
-
+            mutantRequest = new Gson().fromJson(requestBody, DnaRequest.class);
         }catch(Exception e){
             throw new InvalidDnaException("Request format is invalid");
         }
+        return dnaService.analyzeDnaAndSendResult(mutantRequest.getDna());
     }
 }

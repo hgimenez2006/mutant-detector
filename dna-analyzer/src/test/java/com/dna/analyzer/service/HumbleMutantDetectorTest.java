@@ -6,14 +6,28 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class HumbleMutantDetectorTest {
     private SequenceDetectorFactory sequenceDetectorFactory = new SequenceDetectorFactory();
-    private MutantDetector mutantDetector = new HumbleMutantDetector(sequenceDetectorFactory);
+    private MutantDetector mutantDetector = new HumbleMutantDetector(4, 2,
+            sequenceDetectorFactory);
 
     private boolean detectMutant(String[] dna) throws InvalidDnaException {
         DnaResult dnaResult = mutantDetector.detectMutant(dna);
         return dnaResult.isMutant();
+    }
+
+    @Test
+    public void human22() throws InvalidDnaException {
+        String[] dna = new String[4];
+        dna[0] = "ACCA";
+        dna[1] = "TATA";
+        dna[2] = "CACA";
+        dna[3] = "GATA";
+
+        boolean res = detectMutant(dna);
+        assertFalse(res);
     }
 
     @Test

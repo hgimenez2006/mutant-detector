@@ -4,9 +4,10 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
-import com.dna.common.AwsRegionUtil;
 import org.apache.commons.io.IOUtils;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -14,11 +15,12 @@ public class S3Repository {
 
     private final AmazonS3 s3;
 
-    public S3Repository() {
-        Regions region = AwsRegionUtil.getAwsRegion();
+    @Inject
+    public S3Repository(@Named("aws_region") final String awsRegion) {
+        //Regions region = AwsRegionUtil.getAwsRegion();
 
         s3 = AmazonS3ClientBuilder.standard()
-                .withRegion(region).build();
+                .withRegion(Regions.fromName(awsRegion)).build();
                 //.withRegion(Regions.US_EAST_1).build();
     }
 
