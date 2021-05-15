@@ -13,27 +13,13 @@ public class VerticalDetector implements SequenceDetector {
 
     @Override
     public boolean detect(int colIndex, char currChar, int rowSize){
-        boolean sequenceDetected = false;
-
         CharCount verticalCount = verticalMatches.get(colIndex);
         if (verticalCount == null){
             verticalCount = new CharCount(mutantSequenceSize);
+            verticalMatches.put(colIndex, verticalCount);
         }
 
-        if (verticalCount.isSameCharThanPrevious(currChar)){
-            verticalCount.addCount();
-            if (verticalCount.isSequenceFound()) {
-                sequenceDetected = true;
-                verticalCount.reset();
-            }
-        }
-        else{
-            verticalCount.reset();
-            verticalCount.setCharFound(currChar);
-        }
-
-        verticalMatches.put(colIndex, verticalCount);
-
+        boolean sequenceDetected = CharCountProcessor.processCharCount(verticalCount, currChar);
         return sequenceDetected;
     }
 }
