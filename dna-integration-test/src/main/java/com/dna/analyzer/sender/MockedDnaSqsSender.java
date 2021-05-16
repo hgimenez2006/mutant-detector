@@ -1,6 +1,5 @@
 package com.dna.analyzer.sender;
 
-import com.dna.analyzer.sender.DnaSender;
 import com.dna.analyzer.service.DnaResult;
 import com.dna.persister.service.DnaPersisterService;
 import com.google.gson.Gson;
