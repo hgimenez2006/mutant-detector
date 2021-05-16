@@ -12,20 +12,12 @@ public class MongoDnaRepository implements DnaRepository{
     private static final String HUMAN_COLLECTION = "human";
 
     private MongoDatabase mongoDatabase;
-    private String dbName;
-    private String url;
 
     @Inject
     public MongoDnaRepository( @Named("mongodb_url") final String url,
                                @Named("mongodb_dbName") final String dbName) {
-        this.dbName = dbName;
-        this.url = url;
-        this.mongoDatabase = connectAndGetDatabase();
-    }
-
-    private MongoDatabase connectAndGetDatabase(){
         MongoClient mongoClient = new MongoClient(new MongoClientURI(url));
-        return mongoClient.getDatabase(dbName);
+        this.mongoDatabase = mongoClient.getDatabase(dbName);
     }
 
     public long getHumanCount(){
@@ -37,15 +29,7 @@ public class MongoDnaRepository implements DnaRepository{
     }
 
     private long getCount(String collectionName) {
-        long count;
-        MongoDatabase mongoDatabase = connectAndGetDatabase();
-        try {
-            count = mongoDatabase.getCollection(collectionName).countDocuments();
-        } catch (IllegalStateException e) {
-            // connection was closed
-            mongoDatabase = connectAndGetDatabase();
-            count = mongoDatabase.getCollection(collectionName).countDocuments();
-        }
+        long count = mongoDatabase.getCollection(collectionName).countDocuments();
         return count;
     }
 }

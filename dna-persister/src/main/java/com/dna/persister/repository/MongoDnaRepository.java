@@ -3,7 +3,6 @@ package com.dna.persister.repository;
 import com.dna.persister.service.DnaResult;
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -17,8 +16,6 @@ public class MongoDnaRepository implements DnaRepository{
     private static final String HUMAN_COLLECTION = "human";
 
     private final DnaKeyBuilder dnaKeyBuilder;
-    private String url;
-    private String dbName;
     private MongoDatabase mongoDatabase;
 
     @Inject
@@ -26,16 +23,9 @@ public class MongoDnaRepository implements DnaRepository{
                               @Named("mongodb_url") final String url,
                               @Named("mongodb_dbName") final String dbName) {
         this.dnaKeyBuilder = dnaKeyBuilder;
-        this.url = url;
-        this.dbName = dbName;
-        this.mongoDatabase = connectAndGetDatabase();
-    }
 
-    private MongoDatabase connectAndGetDatabase(){
-        // TODO: try this
-        MongoClientOptions.Builder mongoClientOptions = MongoClientOptions.builder().maxConnectionIdleTime(60000);//.build(); // miliseconds
-        MongoClient mongoClient = new MongoClient(new MongoClientURI(url, mongoClientOptions));
-        return mongoClient.getDatabase(dbName);
+        MongoClient mongoClient = new MongoClient(new MongoClientURI(url));
+        this.mongoDatabase = mongoClient.getDatabase(dbName);
     }
 
     @Override
@@ -44,14 +34,11 @@ public class MongoDnaRepository implements DnaRepository{
         String collectionName = dnaResult.isMutant() ? MUTANT_COLLECTION : HUMAN_COLLECTION;
 
         try {
-            insertDocument(mongoDatabase, collectionName, document);
-        } catch (IllegalStateException e) {
-            // connection was closed
-            mongoDatabase = connectAndGetDatabase();
-            insertDocument(mongoDatabase, collectionName, document);
-        } catch (com.mongodb.MongoWriteException e) {
+            mongoDatabase.getCollection(collectionName).insertOne(document);
+        }
+        catch (com.mongodb.MongoWriteException e) {
+            // check if the error is because dna was already persisted or not
             if (ErrorCategory.fromErrorCode(e.getCode()) != ErrorCategory.DUPLICATE_KEY) {
-                // TODO: we could search for the doc anyway, just to be 100% percent sure
                 throw e;
             }
         }
@@ -66,9 +53,5 @@ public class MongoDnaRepository implements DnaRepository{
         document.append("dna", dnaResult.getDna());
 
         return document;
-    }
-
-    private void insertDocument(MongoDatabase mongoDatabase, String collectionName, Document document){
-        mongoDatabase.getCollection(collectionName).insertOne(document);
     }
 }
