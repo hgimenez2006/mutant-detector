@@ -12,8 +12,8 @@ import com.dna.persister.repository.MongoDnaRepository;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
-// Overrides the guice module definition for dna-analyzer to bind dna-analyzer with
-// dna-persisted through MockedDnaSqsSender
+// Overrides the dna-analyzer guice module, to connect dna-analyzer with
+// dna-persister through MockedDnaSqsSender
 public class DnaAnalyzerModule extends AbstractModule {
     @Override
     protected void configure() {
