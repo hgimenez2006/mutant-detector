@@ -21,7 +21,6 @@ Resources:
         Variables:
           PARAM1: VALUE
       Events:
-        #HelloWorld:
         Mutant:
           Type: Api
           Properties:
@@ -31,7 +30,7 @@ Resources:
   StatsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: dna-stats
+      CodeUri: dna-integration-test
       Handler: com.dna.stats.StatsHandler::handleRequest
       Runtime: java8
       MemorySize: 512
@@ -39,7 +38,6 @@ Resources:
         Variables:
           PARAM1: VALUE
       Events:
-        #HelloWorld:
         Stats:
           Type: Api
           Properties:

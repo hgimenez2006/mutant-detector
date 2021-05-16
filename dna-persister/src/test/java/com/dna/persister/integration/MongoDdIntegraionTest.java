@@ -50,8 +50,10 @@ public class MongoDdIntegraionTest {
         ClientSession session = mongoClient.startSession();*/
     }
 
-    //@Test
+    @Test
     public void insertDuplicate(){
+        String url = "mongodb://localhost:27017/?retryWrites=true&w=majority";
+        String dbName = "dna";
         MongoClientURI uri = new MongoClientURI(url);
         MongoClient mongoClient = new MongoClient(uri);
         MongoDatabase mongoDatabase = mongoClient.getDatabase(dbName);
