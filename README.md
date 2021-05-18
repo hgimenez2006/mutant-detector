@@ -2,21 +2,24 @@
 
 ![alt text](docs/mutant-detector.png)
 
-El stack utilizado es el de Amzon web services.  
+Stack utilizado: Java + Amazon web services + MongoDB Atlas.  
+  
 Para el diseño se tuvieron en cuenta dos características:  
-a) Variación agresiva de tráfico.  
-Para atacar esto se utilizaron funciones lambda, desacoplando la solución en 3 módulos:
+a) Variación agresiva de tráfico (requerimiento explícito).  
+Solución: funciones lambda. Desacople de la solución en 3 módulos:
 - dna-analyer: encargado de analizar el adn
 - dna-persister: encargado de persistir el adn 
 - dna-stats: encargado de entregar las estadísticas  
 
-b) Tamaño de los datos.
+b) Tamaño de los datos (requerimiento supuesto).
 Tratándose de adn se buscó una implementación que permitiera lidiar con 
-largas cadenas de texto. MongoDB permite máximos de X. Amazon sqs extendida permite enviar
-mensajes de hasta X mb, usando S3 como persistencia intermedia.
+largas cadenas de texto. 
+Por eso se eligió MongoDB en lugar de DynamoDB (mongo permite máximos de X), y
+el cliente extendido de Amazon sqs (que permite enviar
+mensajes de hasta X mb, usando S3 como capa de persistencia intermedia).
 
 Requerimientos para la ejecución local:
-- jdk 8 o superior
+- jdk 1.8 o superior
 - maven
 - docker
 - aws sam cli
@@ -39,7 +42,8 @@ Pasos previos a la ejecución
 - Instalar artefactos maven: *mvn clean install*  
 - Realizar sam build: *sam build*
 
-Ejecución: *sam local start-api* 
+Ejecución - ejecutar en el directorio raiz (donde se encuentra template.yaml):  
+*sam local start-api* 
 
 Acceso a los endpoints locales:
 - POST http://localhost:3000/mutant

@@ -8,6 +8,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
+/**
+ * Recorre la secuencia de ADN, letra por letra, una sola vez. La recorre hasta el final para asegurarse que la
+ * secuencia es valida. Un posible improvement podria ser que esto fuera una property si no es necesario asegurarse
+ * que el resto de la secuencia sea valida una vez ya detectado un mutante
+ */
 public class HumbleMutantDetector implements MutantDetector {
     private int mutantSequenceSize; // cantidad de letras seguidas que forma una secuencia mutante
     private int mutantSequenceCount; // cantidad de veces que se deben repetir las secuencias
@@ -60,8 +65,10 @@ public class HumbleMutantDetector implements MutantDetector {
                         }
                     }
                 }
-                //if (mutantDetected){
-                    //break; --> we continue to analyze all dna
+
+                // This could be an improvement:
+                //if (mutantDetected && !validateAllDna){
+                    //break;
                 //}
             }
         }
