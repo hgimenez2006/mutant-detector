@@ -17,6 +17,9 @@ public class HumbleMutantDetector implements MutantDetector {
     public HumbleMutantDetector(@Named("mutant_seq_size") final int mutantSequenceSize,
                                 @Named("mutant_seq_count") final int mutantSequenceCount,
                                 final SequenceDetectorFactory sequenceDetectorFactory){
+        if (mutantSequenceSize <= 0 || mutantSequenceCount <=0){
+            throw new IllegalArgumentException("mutant_seq_size and mutant_seq_count should be greater than zero");
+        }
         this.mutantSequenceCount = mutantSequenceCount;
         this.mutantSequenceSize = mutantSequenceSize;
         this.sequenceDetectorFactory = sequenceDetectorFactory;
