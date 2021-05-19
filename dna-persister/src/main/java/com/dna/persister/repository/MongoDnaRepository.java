@@ -1,6 +1,6 @@
 package com.dna.persister.repository;
 
-import com.dna.persister.service.DnaResult;
+import com.dna.common.DnaResult;
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;

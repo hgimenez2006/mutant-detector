@@ -1,13 +1,11 @@
 package com.dna.persister.integration;
 
+import com.dna.common.DnaResult;
 import com.dna.persister.repository.MongoDnaRepository;
-//import com.dna.test.IntegrationTest;
 import com.dna.persister.module.DnaPersisterModule;
-import com.dna.persister.service.DnaResult;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 
 //@Category(IntegrationTest.class)
 public class MongoDnaRepositoryIntegrationTest {

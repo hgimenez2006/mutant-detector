@@ -1,9 +1,9 @@
 package com.dna.persister.service;
 
+import com.dna.common.DnaResult;
 import com.dna.persister.repository.DnaRepository;
 import com.dna.persister.s3.S3Repository;
 import com.google.gson.Gson;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

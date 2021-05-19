@@ -1,7 +1,7 @@
 package com.dna.analyzer.sender;
 
+/*
 import com.amazon.sqs.javamessaging.AmazonSQSExtendedClient;
-import com.dna.analyzer.service.DnaResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 
 // NOT WORKING
 
-/*
+
 @RunWith(MockitoJUnitRunner.class)
 public class DnaSqsSenderTest{
     @Mock

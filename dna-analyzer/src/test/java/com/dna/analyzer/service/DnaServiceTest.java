@@ -2,6 +2,7 @@ package com.dna.analyzer.service;
 
 import com.dna.analyzer.exception.InvalidDnaException;
 import com.dna.analyzer.sender.DnaSender;
+import com.dna.common.DnaResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

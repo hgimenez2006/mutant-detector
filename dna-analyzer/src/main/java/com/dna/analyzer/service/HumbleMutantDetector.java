@@ -3,6 +3,7 @@ package com.dna.analyzer.service;
 import com.dna.analyzer.exception.InvalidDnaException;
 import com.dna.analyzer.service.detector.SequenceDetector;
 import com.dna.analyzer.service.detector.SequenceDetectorFactory;
+import com.dna.common.DnaResult;
 
 import javax.inject.Inject;
 import javax.inject.Named;

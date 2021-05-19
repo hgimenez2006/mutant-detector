@@ -1,4 +1,4 @@
-package com.dna.analyzer.service;
+package com.dna.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

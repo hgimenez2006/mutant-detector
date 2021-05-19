@@ -1,7 +1,6 @@
 package com.dna.analyzer.sender;
 
-import com.dna.analyzer.service.DnaResult;
-import lombok.extern.slf4j.Slf4j;
+import com.dna.common.DnaResult;
 
 public class DnaSqsMockSender implements DnaSender{
     @Override

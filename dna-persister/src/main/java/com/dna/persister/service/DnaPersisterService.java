@@ -1,6 +1,6 @@
 package com.dna.persister.service;
 
-import com.dna.persister.PersisterHandler;
+import com.dna.common.DnaResult;
 import com.dna.persister.repository.DnaRepository;
 import com.dna.persister.s3.S3Repository;
 import com.google.gson.Gson;
@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.IOException;
 
 public class DnaPersisterService {

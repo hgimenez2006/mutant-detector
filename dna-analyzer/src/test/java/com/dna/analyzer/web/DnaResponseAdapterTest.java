@@ -1,8 +1,7 @@
 package com.dna.analyzer.web;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.dna.analyzer.AnalyzerHandler;
-import com.dna.analyzer.service.DnaResult;
+import com.dna.common.DnaResult;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;

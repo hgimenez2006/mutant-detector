@@ -1,10 +1,8 @@
 package com.dna.analyzer.integration;
 
 import com.dna.analyzer.module.DnaAnalyzerModule;
-import com.dna.analyzer.sender.AmazonSqsFactory;
 import com.dna.analyzer.sender.DnaSender;
-import com.dna.analyzer.sender.DnaSqsSender;
-import com.dna.analyzer.service.DnaResult;
+import com.dna.common.DnaResult;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.apache.commons.lang3.RandomStringUtils;

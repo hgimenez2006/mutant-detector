@@ -1,5 +1,6 @@
 package com.dna.persister.repository;
 
+/*
 import com.dna.persister.service.DnaResult;
 import org.bson.Document;
 import org.junit.Assert;
@@ -38,5 +39,5 @@ public class MongoDnaRepositoryTest {
         Assert.assertEquals(document.get("_id"), key);
         Assert.assertEquals(document.get("dna"), dna);
         Assert.assertNotNull(document.get("createdAt"));
-    }*/
-}
+    }
+}*/
