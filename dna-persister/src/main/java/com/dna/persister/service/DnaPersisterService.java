@@ -3,16 +3,15 @@ package com.dna.persister.service;
 import com.dna.common.DnaResult;
 import com.dna.persister.repository.DnaRepository;
 import com.dna.persister.s3.S3Repository;
+import com.dna.persister.sqs.ExtendedSqsMessage;
 import com.google.gson.Gson;
+import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
 import javax.inject.Inject;
 import java.io.IOException;
 
 public class DnaPersisterService {
-    private final static String SQS_MSG_BUCKET_NAME = "s3BucketName";
-
     private final DnaRepository dnaRepository;
     private final S3Repository s3Repository;
 
@@ -23,37 +22,52 @@ public class DnaPersisterService {
         this.s3Repository = s3Repository;
     }
 
+    /**
+     * Process the sqs message and persis it, extracting the dna result from the message itself or from an S3 bucket
+     * (for dna too larges the dna result is stored in S3).
+     */
     public void processAndSaveMessage(String sqsMessageBody) throws IOException {
-        DnaResult dnaResult = getDnaResult(sqsMessageBody);
+        DnaMessage dnaMessage = getDnaMessage(sqsMessageBody);
+        DnaResult dnaResult = new Gson().fromJson(dnaMessage.getDnaResultAsJson(), DnaResult.class);
         dnaRepository.insertDnaResult(dnaResult);
+
+        if (dnaMessage.isFromS3()){
+            removeFileFromS3(dnaMessage.getExtendedSqsMessage());
+        }
     }
 
-    private DnaResult getDnaResult(String msgBody) throws IOException {
-        String dnaResultJson;
-        if (msgBody.contains(SQS_MSG_BUCKET_NAME)){
-            // get dna result from s3 file
-            dnaResultJson = retrieveContentFromS3(msgBody);
+    private void removeFileFromS3(ExtendedSqsMessage extendedSqsMessage){
+        try{
+            s3Repository.deleteFile(extendedSqsMessage.getS3BucketName(), extendedSqsMessage.getS3Key());
+        }catch(Exception e){
+            System.out.println("Error deleting file from S3: " + e.getMessage());
         }
-        else{
-            dnaResultJson = msgBody;
-        }
-        DnaResult dnaResult = new Gson().fromJson(dnaResultJson, DnaResult.class);
-        return dnaResult;
     }
 
-    private String retrieveContentFromS3(String msgBody) throws IOException {
-        String s3MessageJson = msgBody.substring(msgBody.indexOf(SQS_MSG_BUCKET_NAME)-2,
-                msgBody.length()-1);
-        S3Message s3Message = new Gson().fromJson(s3MessageJson, S3Message.class);
+    private DnaMessage getDnaMessage(String msgBody) throws IOException {
+        if (ExtendedSqsMessage.isExtendedSqsMessage(msgBody)){
+            ExtendedSqsMessage extendedSqsMessage = ExtendedSqsMessage.of(msgBody);
+            String dnaResultAsJson = s3Repository.getFileContent(
+                    extendedSqsMessage.getS3BucketName(),
+                    extendedSqsMessage.getS3Key());
 
-        String s3Content = s3Repository.getFileContent(s3Message.getS3BucketName(), s3Message.getS3Key());
-        return s3Content;
+            return DnaMessage.builder()
+                    .extendedSqsMessage(extendedSqsMessage)
+                    .dnaResultAsJson(dnaResultAsJson)
+                    .build();
+        }
+
+        return DnaMessage.builder().dnaResultAsJson(msgBody).build();
     }
 
     @Data
-    @ToString
-    private class S3Message {
-        private String s3BucketName;
-        private String s3Key;
+    @Builder
+    private static class DnaMessage {
+        ExtendedSqsMessage extendedSqsMessage;
+        String dnaResultAsJson;
+
+        boolean isFromS3(){
+            return extendedSqsMessage != null;
+        }
     }
 }

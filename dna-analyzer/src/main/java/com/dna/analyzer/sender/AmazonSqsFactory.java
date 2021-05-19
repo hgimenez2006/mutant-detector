@@ -14,7 +14,8 @@ import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 public class AmazonSqsFactory {
     public AmazonSQS getAmazonSqs(final String region, final String s3bucket) {
         AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-                .withRegion(region).build();
+                .withRegion(Regions.fromName(region))
+                .build();
 
         ExtendedClientConfiguration extendedClientConfig =
                 new ExtendedClientConfiguration()
