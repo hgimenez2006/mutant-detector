@@ -10,6 +10,8 @@ import org.junit.Test;
 
 public class DnaSqsSenderIntegrationTest {
 
+    /*
+    ANDA PERO NO LE VEO MUCHO SENTIDO
     @Test
     public void sendBigMessageToSqs() {
         Injector injector = Guice.createInjector(new DnaAnalyzerModule());
@@ -17,5 +19,5 @@ public class DnaSqsSenderIntegrationTest {
         String dna = RandomStringUtils.randomAlphabetic(1000000);
         DnaResult dnaResult = new DnaResult(true, dna);
         analyzedDnaSqsSender.sendAnalyzedDnaToPersister(dnaResult);
-    }
+    }*/
 }
