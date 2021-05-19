@@ -12,16 +12,10 @@ import org.junit.Test;
 
 public class DnaSqsSenderIntegrationTest {
 
-    /**
-     * Sends message to dna-queue
-     */
-    //@Test //NOT WORKING
-    public void testSend() {
+    @Test
+    public void sendBigMessageToSqs() {
         Injector injector = Guice.createInjector(new DnaAnalyzerModule());
-        //AmazonSqsFactory amazonSqsFactory = injector.getInstance(AmazonSqsFactory.class);
-        //AmazonSqsFactory amazonSqsFactory = injector.getInstance(AmazonSqsFactory.class);
         DnaSender analyzedDnaSqsSender = injector.getInstance(DnaSender.class);
-
         String dna = RandomStringUtils.randomAlphabetic(1000000);
         DnaResult dnaResult = new DnaResult(true, dna);
         analyzedDnaSqsSender.sendAnalyzedDnaToPersister(dnaResult);

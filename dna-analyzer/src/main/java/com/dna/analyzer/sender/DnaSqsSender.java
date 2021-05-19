@@ -8,6 +8,9 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+/**
+ * Sends the dna analysis result to sqs
+ */
 public class DnaSqsSender implements DnaSender {
     private AmazonSQS amazonSQS;
     private String sqsUrl;

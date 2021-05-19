@@ -6,6 +6,9 @@ import com.dna.stats.repository.MongoDnaRepository;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
+/**
+ * Guice configuration module
+ */
 public class StatsDnaModule extends AbstractModule {
     @Override
     protected void configure() {

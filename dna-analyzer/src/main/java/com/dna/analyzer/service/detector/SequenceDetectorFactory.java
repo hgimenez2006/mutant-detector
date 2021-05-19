@@ -4,7 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SequenceDetectorFactory {
-    // TODO: with system properties, we could control what detector actually is executed
+    // Future improvement: with some properties we could control what detector actually is executed, in case
+    // the rules of detection change in the future
     public List<SequenceDetector> getSequenceDetectors(int mutantSequenceSize){
         HorizontalDetector horizontalDetector = new HorizontalDetector(mutantSequenceSize);
         VerticalDetector verticalDetector = new VerticalDetector(mutantSequenceSize);

@@ -37,7 +37,7 @@ public class MongoDnaRepository implements DnaRepository{
             mongoDatabase.getCollection(collectionName).insertOne(document);
         }
         catch (com.mongodb.MongoWriteException e) {
-            // check if the error is because dna was already persisted or not
+            // check if the error is because duplicated dna
             if (ErrorCategory.fromErrorCode(e.getCode()) != ErrorCategory.DUPLICATE_KEY) {
                 throw e;
             }

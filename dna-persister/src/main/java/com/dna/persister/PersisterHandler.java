@@ -19,12 +19,13 @@ public class PersisterHandler implements RequestHandler<SQSEvent, Void> {
     @Override
     public Void handleRequest(SQSEvent sqsEvent, Context context) {
         LambdaLogger logger = context.getLogger();
-        //logger.log("ENVIRONMENT VARIABLES: " + new Gson().toJson(System.getenv()));
+        logger.log("Environment: " + new Gson().toJson(System.getenv()));
 
         sqsEvent.getRecords().stream().forEach(sqsMessage -> {
             try {
                 handleMessage(sqsMessage);
             } catch (IOException e) {
+                logger.log("Error handling message: " + e.getMessage());
                 throw new RuntimeException(e);
             }
         });

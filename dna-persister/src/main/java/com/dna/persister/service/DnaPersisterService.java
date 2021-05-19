@@ -25,7 +25,6 @@ public class DnaPersisterService {
     }
 
     public void processAndSaveMessage(String sqsMessageBody) throws IOException {
-        //TODO: borrar el archivo de s3 a manopla
         DnaResult dnaResult = getDnaResult(sqsMessageBody);
         dnaRepository.insertDnaResult(dnaResult);
     }

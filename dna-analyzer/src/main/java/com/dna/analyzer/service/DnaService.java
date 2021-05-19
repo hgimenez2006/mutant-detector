@@ -5,6 +5,9 @@ import com.dna.analyzer.sender.DnaSender;
 
 import javax.inject.Inject;
 
+/**
+ * In charge of analyzing the dna and sending the result to the persister
+ */
 public class DnaService {
     private final MutantDetector mutantDetector;
     private final DnaSender dnaSender;

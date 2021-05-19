@@ -8,6 +8,9 @@ import com.dna.common.PropertyLoader;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
+/**
+ * Guice configuration module
+ */
 public class DnaAnalyzerModule extends AbstractModule {
     @Override
     protected void configure() {

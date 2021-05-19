@@ -8,6 +8,9 @@ import com.dna.persister.repository.MongoDnaRepository;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
+/**
+ * Guice configuration module
+ */
 public class DnaPersisterModule extends AbstractModule {
     @Override
     protected void configure() {

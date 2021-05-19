@@ -1,7 +1,7 @@
 package com.dna.analyzer.service.detector;
 
-public class CharCountProcessor {
 
+public class CharCountProcessor {
     protected static boolean processCurrentChar(CharCount charCount, char currChar) {
         boolean sequenceDetected = false;
         if (charCount.isSameCharThanPrevious(currChar)) {

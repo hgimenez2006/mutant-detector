@@ -17,21 +17,9 @@ public class S3Repository {
 
     @Inject
     public S3Repository(@Named("aws_region") final String awsRegion) {
-        //Regions region = AwsRegionUtil.getAwsRegion();
-
         s3 = AmazonS3ClientBuilder.standard()
                 .withRegion(Regions.fromName(awsRegion)).build();
-                //.withRegion(Regions.US_EAST_1).build();
     }
-
-    /*public void uploadFile(String bucketName, String dnaKey, String dna) {
-        try {
-            s3.putObject(bucketName, dnaKey, dna);
-        } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
-            System.exit(1);
-        }
-    }*/
 
     public String getFileContent(String s3BucketName, String s3Key) throws IOException {
         S3Object s3Object = s3.getObject(s3BucketName, s3Key);

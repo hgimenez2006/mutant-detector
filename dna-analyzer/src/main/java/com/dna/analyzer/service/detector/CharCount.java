@@ -2,6 +2,9 @@ package com.dna.analyzer.service.detector;
 
 import lombok.Data;
 
+/**
+ * Holds the counting for each char processed
+ */
 @Data
 public class CharCount {
     private char charFound;

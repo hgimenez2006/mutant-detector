@@ -9,11 +9,11 @@ import com.dna.analyzer.module.DnaAnalyzerModule;
 import com.dna.analyzer.exception.InvalidDnaException;
 import com.dna.analyzer.service.DnaResult;
 import com.dna.analyzer.service.DnaService;
-import com.dna.analyzer.web.DnaRequest;
+import com.dna.analyzer.web.DnaRequestAdapter;
+import com.dna.analyzer.web.DnaResponseAdapter;
 import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 
 public class AnalyzerHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
@@ -21,40 +21,24 @@ public class AnalyzerHandler implements RequestHandler<APIGatewayProxyRequestEve
     private DnaService dnaService = injector.getInstance(DnaService.class);
 
     @Override
-    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent,
+    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request,
                                                       Context context) {
         LambdaLogger logger = context.getLogger();
-        APIGatewayProxyResponseEvent response;
+        logger.log("Environment: " + new Gson().toJson(System.getenv()));
+
         try{
-            DnaResult result = handleRequestPlease(apiGatewayProxyRequestEvent.getBody());
-            response = getResponse(result);
+            DnaRequestAdapter dnaRequestAdapter = new DnaRequestAdapter(request.getBody());
+            DnaResult dnaResult = dnaService.analyzeDnaAndSendResult(dnaRequestAdapter.getDnaRequest().getDna());
+
+            DnaResponseAdapter dnaResponseAdapter = new DnaResponseAdapter(dnaResult);
+            return  dnaResponseAdapter.getApiGatewayProxyResponse();
+
         } catch (InvalidDnaException e) {
-            logger.log("Returing BAD_REQUEST :" + e.getMessage());
-            response = new APIGatewayProxyResponseEvent();
-            response.setBody(e.getMessage());
-            response.setStatusCode(HttpStatus.SC_BAD_REQUEST);
+            logger.log("Returing BAD _REQUEST :" + e.getMessage());
+            APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
+                    .withBody(e.getMessage())
+                    .withStatusCode(HttpStatus.SC_BAD_REQUEST);
+            return response;
         }
-        return response;
-    }
-
-    protected APIGatewayProxyResponseEvent getResponse(DnaResult result){
-        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-        response.setStatusCode(result.isMutant() ? HttpStatus.SC_OK : HttpStatus.SC_FORBIDDEN);
-        response.setBody(result.isMutant() ? "ADN mutante" : "ADN humano");
-        return response;
-    }
-
-    protected DnaResult handleRequestPlease(String requestBody) throws InvalidDnaException {
-        if (StringUtils.isBlank(requestBody)){
-            throw new InvalidDnaException("Request body is empty");
-        }
-
-        DnaRequest mutantRequest;
-        try {
-            mutantRequest = new Gson().fromJson(requestBody, DnaRequest.class);
-        }catch(Exception e){
-            throw new InvalidDnaException("Request format is invalid");
-        }
-        return dnaService.analyzeDnaAndSendResult(mutantRequest.getDna());
     }
 }
