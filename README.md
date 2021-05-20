@@ -51,8 +51,12 @@ Endpoints remotos en AWS:
 - https://0ytar4ltb4.execute-api.us-east-1.amazonaws.com/test/mutant
 
   
-  
-Consideraciones para la instalación en AWS si Magneto deseara llevar esto en producción:  
+Para la instalación en AWS se requerirá:
+- endpoints en Api gateway que sean los triggers de *dna-analyzer* y *dna-stats*
+- cola de mensajes sqs común que sea el trigger de *dna-persister* 
+- una bucket en S3 para almacenamiento de dna extensos
+   
+Consideraciones por si Magneto deseara llevar esto a producción:  
 - dna-persister : la cantidad máxima de instancias debe balancearse acorde a la cantidad máxima de conecciones
                   que mongodb nos permite. En la url de la conección a mongo deberá setearse un idle-time adecuado 
                   (ya que las conecciones quedarán abiertas luego que la instancia lambda deje de existir).  
