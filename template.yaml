@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  dna-integration-test
+
+  Sample SAM Template for dna-integration-test
+
+Globals:
+  Function:
+    Timeout: 20
+
+Resources:
+  MutantFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dna-integration-test
+      Handler: com.dna.analyzer.AnalyzerHandler::handleRequest
+      Runtime: java8
+      MemorySize: 512
+      Environment:
+        Variables:
+          PARAM1: VALUE
+      Events:
+        Mutant:
+          Type: Api
+          Properties:
+            Path: /test/mutant
+            Method: post
+
+  StatsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dna-integration-test
+      Handler: com.dna.stats.StatsHandler::handleRequest
+      Runtime: java8
+      MemorySize: 512
+      Environment:
+        Variables:
+          PARAM1: VALUE
+      Events:
+        Stats:
+          Type: Api
+          Properties:
+            Path: /test/stats
+            Method: get

@@ -7,12 +7,24 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="mutant-detector" />
+        <module name="dna-common" />
+        <module name="dna-analyzer" />
+        <module name="dna-integration-test" />
+        <module name="dna-stats" />
+        <module name="dna-persister" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="dna-sender" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="dna-analyzer" options="" />
+      <module name="dna-common" options="" />
+      <module name="dna-persister" options="" />
+      <module name="dna-sender" options="-parameters" />
+      <module name="dna-stats" options="" />
       <module name="mutant-detector" options="-parameters" />
     </option>
   </component>

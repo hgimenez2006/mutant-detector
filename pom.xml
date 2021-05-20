@@ -3,12 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.1.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+    <packaging>pom</packaging>
+    <modules>
+        <module>dna-analyzer</module>
+        <module>dna-common</module>
+        <module>dna-persister</module>
+        <module>dna-stats</module>
+        <module>dna-integration-test</module>
+    </modules>
     <groupId>com.horacio</groupId>
     <artifactId>mutant-detector</artifactId>
     <version>1.0</version>
@@ -16,160 +18,51 @@
     <description>Detector de mutantes</description>
 
     <properties>
+        <junit.version>5.7.0</junit.version>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
         <java.version>1.8</java.version>
         <wrapper.version>1.0.17.RELEASE</wrapper.version>
         <guice.version>4.1.0</guice.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>
-<!--        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
-            <version>3.13.1</version>
-        </dependency>-->
-
-        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-elasticache -->
-        <!-- https://mvnrepository.com/artifact/net.spy/spymemcached -->
-        <dependency>
-            <groupId>net.spy</groupId>
-            <artifactId>spymemcached</artifactId>
-            <version>2.12.3</version>
-        </dependency>
-
-
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>${guice.version}</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-        <!--<dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.30</version>
-        </dependency>-->
-<!--
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-lambda-java-log4j2</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.13.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.13.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j18-impl</artifactId>
-            <version>2.13.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
-        </dependency> -->
-
-
-<!--        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.13.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.13.0</version>
-        </dependency>-->
-
-        <!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
+            <version>${jaxb-api.version}</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.8.0</version>
         </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/com.amazonaws/amazon-sqs-java-extended-client-lib -->
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>amazon-sqs-java-extended-client-lib</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-events</artifactId>
             <version>2.2.7</version>
         </dependency>
-
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-core</artifactId>
-            <version>1.1.0</version>
+            <version>1.2.0</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3 -->
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.238</version>
-        </dependency>
-
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-sqs</artifactId>
             <version>1.11.238</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-lambda -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-lambda</artifactId>
             <version>1.11.238</version>
         </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/com.google.dagger/dagger -->
-        <dependency>
-            <groupId>com.google.dagger</groupId>
-            <artifactId>dagger</artifactId>
-            <version>2.16</version>
-        </dependency>
-
-        <!--<dependency>
-            <groupId>io.symphonia</groupId>
-            <artifactId>lambda-logging</artifactId>
-        </dependency>-->
-
-        <!--<dependency>
-            <groupId>com.google.dagger</groupId>
-            <artifactId>dagger-compiler</artifactId>
-            <version>2.16</version>
-            <optional>true</optional>
-        </dependency>-->
-
-        <!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>3.12.1</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -181,94 +74,121 @@
             <version>2.8.6</version>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- TEST -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-tests</artifactId>
+            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>1.7.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
-
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>amazon-sqs-java-extended-client-lib</artifactId>
+                <version>1.2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-s3</artifactId>
+                <version>1.11.238</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mongodb</groupId>
+                <artifactId>mongo-java-driver</artifactId>
+                <version>3.12.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>my-repo-bucket-snapshot</id>
-            <url>s3://mutant</url>
-        </snapshotRepository>
-        <repository>
-            <id>my-repo-bucket-release</id>
-            <url>s3://mutant</url>
-        </repository>
-    </distributionManagement>
-
     <build>
-        <!--<extensions>
-            <extension>
-                <groupId>com.gkatzioura.maven.cloud</groupId>
-                <artifactId>s3-storage-wagon</artifactId>
-                <version>1.0</version>
-            </extension>
-        </extensions>-->
         <plugins>
-            <!--<plugin>
-                <groupId>com.gkatzioura.maven.cloud</groupId>
-                <artifactId>s3-storage-wagon</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>upload-multiples-files-no-key</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>s3-upload</goal>
-                        </goals>
-                        <configuration>
-                            <region></region>
-                            <bucket>mutant</bucket>
-                            <path>/path/to/local/directory</path>
-                        </configuration>
-                    </execution>
-                </executions>
-                </plugin>
-            <plugin>
+           <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.11</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>2.12</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>com.google.dagger</groupId>
-                            <artifactId>dagger-compiler</artifactId>
-                            <version>2.16</version>
-                        </path>
-                    </annotationProcessorPaths>
+                    <includes>
+                        <include>**/*.class</include>
+                    </includes>
+                    <excludedGroups></excludedGroups>
                 </configuration>
             </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>2.17</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <!--<excludedGroups>com.dna.test.IntegrationTest</excludedGroups>-->
+                    <excludes>
+                        <exclude>**/integration/*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -285,13 +205,27 @@
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                     <shadedClassifierName>aws</shadedClassifierName>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <!--<version>0.7.7.201606060606</version>-->
                 <version>0.8.6</version>
+                <configuration>
+                    <excludes>
+                        com/dna/persister/repository/MongoDnaRepository.class,
+                        com/dna/stats/repository/MongoDnaRepository.class,
+                        com/dna/persister/s3/S3Repository.class
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -313,12 +247,12 @@
                         <configuration>
                             <rules>
                                 <rule>
-                                    <element>PACKAGE</element>
+                                    <element>BUNDLE</element>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>1.00</minimum>
+                                            <minimum>0.80</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
@@ -327,6 +261,40 @@
                     </execution>
                 </executions>
             </plugin>
+<!--            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.0</version>
+                <configuration>
+                    <rules>
+                        <rule implementation="org.jacoco.maven.RuleConfiguration">
+                            <element>BUNDLE</element>
+                            <limits>
+                                <limit implementation="org.jacoco.report.check.Limit">
+                                    <counter>LINE</counter>
+                                    <value>COVEREDRATIO</value>
+                                    <minimum>0.80</minimum>
+                                </limit>
+                            </limits>
+                        </rule>
+                    </rules>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
         </plugins>
     </build>
 </project>
