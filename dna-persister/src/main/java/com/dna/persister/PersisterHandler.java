@@ -13,30 +13,30 @@ import com.google.inject.Injector;
 import java.io.IOException;
 
 public class PersisterHandler implements RequestHandler<SQSEvent, Void> {
-    private Injector injector = Guice.createInjector(new DnaPersisterModule());
-    private DnaPersisterService dnaPersisterService = injector.getInstance(DnaPersisterService.class);
+    private DnaPersisterService dnaPersisterService;
+
+    public PersisterHandler(){
+        dnaPersisterService = Guice.createInjector(new DnaPersisterModule())
+                .getInstance(DnaPersisterService.class);
+    }
+
+    // For testing
+    public PersisterHandler(DnaPersisterService dnaPersisterService){
+        this.dnaPersisterService = dnaPersisterService;
+    }
 
     @Override
     public Void handleRequest(SQSEvent sqsEvent, Context context) {
-        LambdaLogger logger = context.getLogger();
-        logger.log("Environment: " + new Gson().toJson(System.getenv()));
 
         sqsEvent.getRecords().stream().forEach(sqsMessage -> {
             try {
-                handleMessage(sqsMessage);
+                dnaPersisterService.processAndSaveMessage(sqsMessage.getBody());
             } catch (IOException e) {
-                logger.log("Error handling message: " + e.getMessage());
+                // rollbacking the entire batch here. a better approach would be sending back to
+                // the queue only the message that thrown the error
                 throw new RuntimeException(e);
             }
         });
         return null;
     }
-
-    // TODO: ver si se puede recibir el mensaje transparentemente en lugar de ir a buscarlo a s3
-    // https://docs.aws.amazon.com/sns/latest/dg/large-message-payloads.html
-    protected void handleMessage(SQSEvent.SQSMessage sqsMessage) throws IOException {
-        System.out.println("body=" + sqsMessage.getBody());
-        dnaPersisterService.processAndSaveMessage(sqsMessage.getBody());
-    }
-
 }

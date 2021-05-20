@@ -40,6 +40,7 @@ public class DnaPersisterService {
         try{
             s3Repository.deleteFile(extendedSqsMessage.getS3BucketName(), extendedSqsMessage.getS3Key());
         }catch(Exception e){
+            // dont want to rollback the entire batch for this
             System.out.println("Error deleting file from S3: " + e.getMessage());
         }
     }

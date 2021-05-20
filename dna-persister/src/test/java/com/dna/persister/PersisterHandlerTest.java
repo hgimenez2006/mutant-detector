@@ -1,8 +1,8 @@
 package com.dna.persister;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
+import com.dna.persister.service.DnaPersisterService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -15,23 +15,21 @@ import java.util.Arrays;
 @RunWith(MockitoJUnitRunner.class)
 public class PersisterHandlerTest {
     @Mock
-    Context context;
+    DnaPersisterService dnaPersisterService;
     @Mock
-    LambdaLogger lambdaLogger;
+    Context context;
 
     @Test
     public void handleRequest() throws IOException {
-        SQSEvent sqsEvent = new SQSEvent();
+        PersisterHandler persisterHandler = new PersisterHandler(dnaPersisterService);
+        String msgBody = "xxx";
         SQSEvent.SQSMessage sqsMessage = new SQSEvent.SQSMessage();
+        sqsMessage.setBody(msgBody);
+
+        SQSEvent sqsEvent = new SQSEvent();
         sqsEvent.setRecords(Arrays.asList(sqsMessage));
 
-        PersisterHandler persisterHandler = Mockito.spy(PersisterHandler.class);
-        Mockito.doNothing().when(persisterHandler).handleMessage(sqsMessage);
-        Mockito.when(context.getLogger()).thenReturn(lambdaLogger);
-
         persisterHandler.handleRequest(sqsEvent, context);
-        Mockito.verify(persisterHandler).handleMessage(sqsMessage);
+        Mockito.verify(dnaPersisterService).processAndSaveMessage(msgBody);
     }
-
-
 }

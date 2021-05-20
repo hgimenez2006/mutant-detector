@@ -9,6 +9,6 @@ public class DnaPersisterModuleTest {
     @Test
     public void module(){
         Injector injector = Guice.createInjector(new DnaPersisterModule());
-        DnaPersisterService dnaPersisterService = injector.getInstance(DnaPersisterService.class);
+        injector.getInstance(DnaPersisterService.class);
     }
 }
