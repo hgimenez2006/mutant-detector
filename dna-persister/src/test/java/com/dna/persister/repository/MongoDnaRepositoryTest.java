@@ -1,43 +1,62 @@
 package com.dna.persister.repository;
 
-/*
-import com.dna.persister.service.DnaResult;
+import com.dna.common.DnaResult;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.Spy;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class MongoDnaRepositoryTest {
-    //@Mock
-    //DnaKeyBuilderSHA256 dnaKeyBuilderSHA256;
-    //@Spy
-    //MongoDnaRepository mongoDnaRepository;
-
-    /*
-    String url = "mongodb+srv://xxx:xxx@cluster0.7pfzt.mongodb.net/test?retryWrites=true&w=majority";
-    MongoDnaRepository mongoDnaRepository =
-            new MongoDnaRepository(new DnaKeyBuilderSHA256(), "url", "dbname");
+    @Mock
+    MongoClient mongoClient;
+    @Mock
+    DnaKeyBuilder dnaKeyBuilder;
+    @Mock
+    MongoDatabase mongoDatabase;
+    @Mock
+    MongoCollection mongoCollection;
+    @Captor
+    ArgumentCaptor<Document> documentCaptor;
 
     @Test
-    public void insertDnaResult(){
-        DnaResult dnaResult = DnaResult.builder().mutant(true).dna("AAAA").build();
-        mongoDnaRepository.insertDnaResult(dnaResult);
+    public void insertDna_human() {
+        insertDna("AAATGCGC", false, MongoDnaRepository.HUMAN_COLLECTION);
     }
 
     @Test
-    public void buildDocument(){
-        DnaKeyBuilder dnaKeyBuilder = new DnaKeyBuilderSHA256();
-        String dna = "AAAA";
+    public void insertDna_mutant() {
+        insertDna("AAAAGGGG", true, MongoDnaRepository.MUTANT_COLLECTION);
+    }
 
-        DnaResult dnaResult = DnaResult.builder().mutant(true).dna(dna).build();
-//        MongoDnaRepository mongoDnaRepository = new MongoDnaRepository(dnaKeyBuilder);
-        Document document = mongoDnaRepository.buildDocument(dnaResult);
+    private void insertDna(String dna, boolean mutant, String collectionName){
+        String dbName = "dna";
+        String dnaKey = "dnakey";
 
-        String key = dnaKeyBuilder.buildKey(dna);
+        DnaResult dnaResult = DnaResult.builder().mutant(mutant).dna(dna).build();
+
+        Mockito.when(dnaKeyBuilder.buildKey(dna)).thenReturn(dnaKey);
+        Mockito.when(mongoClient.getDatabase(dbName)).thenReturn(mongoDatabase);
+        Mockito.when(mongoDatabase.getCollection(collectionName)).thenReturn(mongoCollection);
+
+        MongoDnaRepository mongoDnaRepository =
+                new MongoDnaRepository(dnaKeyBuilder, mongoClient, dbName);
+
+        mongoDnaRepository.insertDnaResult(dnaResult);
+
+        Mockito.verify(mongoCollection).insertOne(documentCaptor.capture());
+        Document document = documentCaptor.getValue();
         Assert.assertNotNull(document);
-        Assert.assertEquals(document.get("_id"), key);
-        Assert.assertEquals(document.get("dna"), dna);
+        Assert.assertEquals(dnaKey, document.get("_id"));
+        Assert.assertEquals(dna, document.get("dna"));
         Assert.assertNotNull(document.get("createdAt"));
     }
-}*/
+}

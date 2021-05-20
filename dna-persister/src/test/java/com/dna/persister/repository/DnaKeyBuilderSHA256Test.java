@@ -1,8 +1,6 @@
 package com.dna.persister.repository;
 
 
-import com.dna.persister.repository.DnaKeyBuilder;
-import com.dna.persister.repository.DnaKeyBuilderSHA256;
 import org.junit.Assert;
 import org.junit.Test;
 

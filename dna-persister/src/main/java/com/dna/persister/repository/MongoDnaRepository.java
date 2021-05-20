@@ -12,8 +12,8 @@ import javax.inject.Named;
 import java.util.Date;
 
 public class MongoDnaRepository implements DnaRepository{
-    private static final String MUTANT_COLLECTION = "mutant";
-    private static final String HUMAN_COLLECTION = "human";
+    static final String MUTANT_COLLECTION = "mutant";
+    static final String HUMAN_COLLECTION = "human";
 
     private final DnaKeyBuilder dnaKeyBuilder;
     private MongoDatabase mongoDatabase;
@@ -25,6 +25,12 @@ public class MongoDnaRepository implements DnaRepository{
         this.dnaKeyBuilder = dnaKeyBuilder;
 
         MongoClient mongoClient = new MongoClient(new MongoClientURI(url));
+        this.mongoDatabase = mongoClient.getDatabase(dbName);
+    }
+
+    // For testing
+    public MongoDnaRepository(final DnaKeyBuilder dnaKeyBuilder, final MongoClient mongoClient, final String dbName){
+        this.dnaKeyBuilder = dnaKeyBuilder;
         this.mongoDatabase = mongoClient.getDatabase(dbName);
     }
 

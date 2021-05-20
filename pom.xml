@@ -221,7 +221,6 @@
                 <version>0.8.6</version>
                 <configuration>
                     <excludes>
-                        com/dna/persister/repository/MongoDnaRepository.class,
                         com/dna/stats/repository/MongoDnaRepository.class,
                         com/dna/persister/s3/S3Repository.class
                     </excludes>
