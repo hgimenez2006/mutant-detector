@@ -4,19 +4,22 @@
 
 Stack utilizado: Java + Amazon web services + MongoDB Atlas.  
   
-Para el diseño se tuvieron en cuenta dos características:  
-a) Variación agresiva de tráfico (requerimiento explícito).  
+Para el diseño se tuvo en cuenta:  
+a) Variación agresiva de tráfico (requerimiento explícito)  
 Solución: funciones lambda. Desacople de la solución en 3 módulos:
 - dna-analyer: encargado de analizar el adn
 - dna-persister: encargado de persistir el adn 
 - dna-stats: encargado de entregar las estadísticas  
 
-b) Tamaño de los datos (requerimiento supuesto).
+b) Tamaño de los datos (requerimiento supuesto):
 Tratándose de adn se buscó una implementación que permitiera lidiar con 
 largas cadenas de texto. 
-Por eso se eligió MongoDB en lugar de DynamoDB (mongo permite máximos de X), y
-el cliente extendido de Amazon sqs (que permite enviar
-mensajes de hasta X mb, usando S3 como capa de persistencia intermedia).
+Se eligió una db no-sql no sólo por el poder de escalamiento sino también por la mejor 
+performance a la hora de realizar búsquedas. Y particularmente MongoDB 
+(en lugar de DynamoDB, por ejemplo) ya que mongo permite máximos de 16MB por collection.
+Se utilizó el cliente extendido de Amazon sqs que permite enviar
+mensajes de hasta 2GB valiéndose de S3 como capa de persistencia intermedia.
+
 
 Requerimientos para la ejecución local:
 - jdk 1.8 o superior
@@ -25,50 +28,40 @@ Requerimientos para la ejecución local:
 - aws sam cli
 - mongodb
 
-Configuración:
-- configurar properties en el módulo **dna-integration-test**:  
- 
-Archivo: *dna-integration-test/resources/app.properties*  
-Property: *mongodb_url*  
+Para simplificar la ejecución, en modo local no se utiliza sqs ni S3 (*dna-analyzer* invoca directamente a *dna-persister*).  
+Pasos:  
+- Configurar properties de conección a MongoDB, en el módulo **dna-integration-test**:  
+*dna-integration-test/resources/app.properties*  
 
-Nota: la app por defecto creará databse de nombre "dna" y dos colecciones: "mutant" y "human".
-El nombre de la database es configurable, así como también el largo de la secuencia que determina un mutante 
-(*mutant_seq_size*) y la cantidad de veces que dicha secuencia debe repetirse
-(*mutant_seq_count*).
-El valor de cada property puede sobreescribirse si se setea una variable de ambiente del mismo
-nombre.
+(La app creará database de nombre "dna" por defecto y dos colecciones: "mutant" y "human".
+El valor de las properties puede sobreescribirse si se setea una variable de ambiente del mismo
+nombre.)
 
-Pasos previos a la ejecución
-- Instalar artefactos maven: *mvn clean install*  
-- Realizar sam build: *sam build*
-
-Ejecución - ejecutar en el directorio raiz (donde se encuentra template.yaml):  
-*sam local start-api* 
+- Ejecutar, en directorio root:
+1) *mvn clean install*  
+2) *sam build*
+3) *sam local start-api* 
 
 Acceso a los endpoints locales:
 - POST http://localhost:3000/mutant
 - GET http://localhost:3000/stats
 
-NOTA: para facilitar la ejecución local no se utiliza sqs ni S3 (dna-analyzer invoca directamente a dna-persister). 
-
-La aplicación está instalada en AWS. 
-Endpoints remotos:
+Endpoints remotos en AWS:
 - https://0t4g1eo04d.execute-api.us-east-1.amazonaws.com/test/stats
 - https://0ytar4ltb4.execute-api.us-east-1.amazonaws.com/test/mutant
 
-
-Consideraciones para la instalación en AWS:  
-- dna-analyzer : tener cierto mínimo de instancias activas
-- dna-persister : la cantidad de instancias no debe ser superior a la cantidad máxima de conecciones
-                  que permite mongodb. debido a que luego de conectarse a mongo mantiene la conección 
-                  abierta, para cada conección debe setear un máximo de idle-time adecuado (por las conecciones
-                  que quedarán abiertas una vez que la instancia lambda deje de existir).  
-- dna-stats : configurar de caching a nivel de api-gateway, con un timeout lo más grande posible dependiendo de
-los requerimientos del cliente (qué delay se banca Magneto para el refresh de sus datos).
-Se asumió que este delay no sería exigente (en el orden de segundos).
-Si Magneto fuera muy exigente al respecto y el tráfico en este endpoint comenzara a dar problemas con las
-conecciones a mongodb habría que pensar en desacoplar dna-stats de la base de datos, ya sea usando una
-solución de caching como Redis, o utilizando otra base de datos de alto poder de escalamiento, como DynamoDB.
+  
+  
+Consideraciones para la instalación en AWS si Magneto deseara llevar esto en producción:  
+- dna-persister : la cantidad máxima de instancias debe balancearse acorde a la cantidad máxima de conecciones
+                  que mongodb nos permite. En la url de la conección a mongo deberá setearse un idle-time adecuado 
+                  (ya que las conecciones quedarán abiertas luego que la instancia lambda deje de existir).  
+- dna-stats : configurar de caching a nivel de api-gateway con un timeout adecuado. Esto es, lo más grande posible 
+dependiendo de los requerimientos del cliente (qué delay soportaría para el refresh de sus datos).
+Se asumió que este delay no sería exigente (en el orden de segundos). Si la exigencia fuese mayor y el 
+tráfico en este endpoint comenzara a dar problemas con las conecciones a mongo, habría que pensar en desacoplar 
+*dna-stats* de mongo, ya sea utilizando una solución de caching con persistencia, como Redis, o empleando otra base de datos de 
+alto poder de escalamiento, como DynamoDB, donde *dna-persister* almacenaría exclusivamente los totales.
 
 Solución alternativa:  
 
