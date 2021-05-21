@@ -28,7 +28,7 @@ mensajes de hasta 2GB valiéndose de S3 como capa de persistencia intermedia.
 - aws sam cli
 - mongodb
 
-## Cómo ejecutarlo localmente
+## Instalación y ejecución local
 Configurar url de conección a MongoDB en el módulo *dna-integration-test*:  
 *dna-integration-test/src/main/resources/app.properties*  
 
