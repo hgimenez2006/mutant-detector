@@ -2,7 +2,7 @@
 
 ![alt text](docs/mutant-detector.png)
 
-Stack utilizado: Java + Amazon web services + MongoDB Atlas.  
+**Stack utilizado: Java + Amazon web services + MongoDB Atlas.**  
   
 Para el diseño se tuvo en cuenta:  
 a) Variación agresiva de tráfico (requerimiento explícito)  
@@ -21,43 +21,42 @@ Se utilizó el cliente extendido de Amazon sqs que permite enviar
 mensajes de hasta 2GB valiéndose de S3 como capa de persistencia intermedia.
 
 
-**Requerimientos para la ejecución local:**
+##Requerimientos para la ejecución local
 - jdk 1.8 o superior
 - maven
 - docker
 - aws sam cli
 - mongodb
 
-Para simplificar la ejecución, en modo local no se utiliza sqs ni S3 (*dna-analyzer* invoca directamente a *dna-persister*).  
-La app creará database de nombre "dna" (configurable) y dos colecciones: "mutant" y "human".  
+##Cómo ejecutarlo localmente
+Configurar url de conección a MongoDB en el módulo *dna-integration-test*:  
+*dna-integration-test/src/main/resources/app.properties*  
 
-**Cómo ejecutarlo localmente:**  
-- Configurar properties de conección a MongoDB, en el módulo **dna-integration-test**:  
-*dna-integration-test/resources/app.properties*  
-
-- Ejecutar, en directorio root:
+Ejecutar, en directorio root:  
 1) *mvn clean install*  
 2) *sam build*
 3) *sam local start-api* 
 
-Acceso a los endpoints locales:
+Nota: para simplificar la ejecución en modo local no se utiliza Sqs ni S3 (*dna-analyzer* invoca directamente a *dna-persister*).  
+La app crea database de nombre "dna" y dos colecciones: "mutant" y "human".  
+
+
+**Acceso a los endpoints locales**
 - POST http://localhost:3000/mutant
 - GET http://localhost:3000/stats
 
-Endpoints remotos instalados en AWS:
-- https://0t4g1eo04d.execute-api.us-east-1.amazonaws.com/test/stats
-- https://0ytar4ltb4.execute-api.us-east-1.amazonaws.com/test/mutant
 
   
-Para la instalación en AWS se requerirá:
+## Instalación en AWS
+Se requiere:
 - endpoints en Api gateway que sean los triggers de *dna-analyzer* y *dna-stats*
 - cola de mensajes sqs común que sea el trigger de *dna-persister* 
 - una bucket en S3 para almacenamiento de dna extensos  
 
-Instalada en AWS el valor de las properties puede sobreescribirse si se setea una variable de ambiente del mismo
+Nota: instalada en AWS el valor de las properties puede sobreescribirse si se setea una variable de ambiente del mismo
 nombre. 
    
-Consideraciones por si Magneto deseara llevar esto a producción:  
+**Consideraciones por si Magneto deseara llevar esto a producción:**  
 - dna-persister : la cantidad máxima de instancias debe balancearse acorde a la cantidad máxima de conecciones
                   que mongodb nos permite. Para la conección deberá setearse un idle-time adecuado 
                   ya que puede permanecer abierta luego que la instancia lambda deje de existir.  
@@ -68,7 +67,7 @@ tráfico en este endpoint comenzara a dar problemas con las conecciones a mongo 
 *dna-stats* de mongoDB, ya sea utilizando una solución de caching con persistencia, como Redis, o empleando otra base 
 de datos de alto poder de escalamiento, como DynamoDB, donde *dna-persister* almacenaría exclusivamente los totales.
 
-Solución alternativa:  
+**Solución alternativa:**  
 
 ![alt text](docs/mutant-detector-redis.png)
 
