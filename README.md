@@ -21,14 +21,14 @@ Se utilizó el cliente extendido de Amazon sqs que permite enviar
 mensajes de hasta 2GB valiéndose de S3 como capa de persistencia intermedia.
 
 
-##Requerimientos para la ejecución local
+## Requerimientos para la ejecución local
 - jdk 1.8 o superior
 - maven
 - docker
 - aws sam cli
 - mongodb
 
-##Cómo ejecutarlo localmente
+## Cómo ejecutarlo localmente
 Configurar url de conección a MongoDB en el módulo *dna-integration-test*:  
 *dna-integration-test/src/main/resources/app.properties*  
 
