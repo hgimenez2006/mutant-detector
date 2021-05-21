@@ -9,10 +9,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * This is for create a large dna request, to use it for testing purposes if needed
+ */
 public class LargeDnaCreator {
 
-    @Test
+    //@Test
     public void createLargeDna() throws IOException {
+        // Creates array 1000x1000
         int rowSize=1000;
         String[] dna = new String[rowSize];
 

@@ -14,6 +14,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+
 @RunWith(MockitoJUnitRunner.class)
 public class MongoDnaRepositoryTest {
     @Mock
@@ -43,9 +47,9 @@ public class MongoDnaRepositoryTest {
 
         DnaResult dnaResult = DnaResult.builder().mutant(mutant).dna(dna).build();
 
-        Mockito.when(dnaKeyBuilder.buildKey(dna)).thenReturn(dnaKey);
-        Mockito.when(mongoClient.getDatabase(dbName)).thenReturn(mongoDatabase);
-        Mockito.when(mongoDatabase.getCollection(collectionName)).thenReturn(mongoCollection);
+        when(dnaKeyBuilder.buildKey(dna)).thenReturn(dnaKey);
+        when(mongoClient.getDatabase(dbName)).thenReturn(mongoDatabase);
+        when(mongoDatabase.getCollection(collectionName)).thenReturn(mongoCollection);
 
         MongoDnaRepository mongoDnaRepository =
                 new MongoDnaRepository(dnaKeyBuilder, mongoClient, dbName);
@@ -54,9 +58,9 @@ public class MongoDnaRepositoryTest {
 
         Mockito.verify(mongoCollection).insertOne(documentCaptor.capture());
         Document document = documentCaptor.getValue();
-        Assert.assertNotNull(document);
-        Assert.assertEquals(dnaKey, document.get("_id"));
-        Assert.assertEquals(dna, document.get("dna"));
-        Assert.assertNotNull(document.get("createdAt"));
+        assertNotNull(document);
+        assertEquals(dnaKey, document.get("_id"));
+        assertEquals(dna, document.get("dna"));
+        assertNotNull(document.get("createdAt"));
     }
 }

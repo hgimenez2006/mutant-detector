@@ -22,7 +22,7 @@ public class MockedDnaSqsSender implements DnaSender {
         try {
             dnaPersisterService.processAndSaveMessage(sqsMessage);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }

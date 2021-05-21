@@ -5,6 +5,9 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.Test;
 
+/**
+ * Health check for the module
+ */
 public class DnaAnalyzerModuleTest {
     @Test
     public void module(){

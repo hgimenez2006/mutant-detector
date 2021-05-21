@@ -19,12 +19,12 @@ Resources:
       MemorySize: 512
       Environment:
         Variables:
-          PARAM1: VALUE
+          mongodb_url:
       Events:
         Mutant:
           Type: Api
           Properties:
-            Path: /test/mutant
+            Path: /mutant
             Method: post
 
   StatsFunction:
@@ -36,10 +36,10 @@ Resources:
       MemorySize: 512
       Environment:
         Variables:
-          PARAM1: VALUE
+          mongodb_url:
       Events:
         Stats:
           Type: Api
           Properties:
-            Path: /test/stats
+            Path: /stats
             Method: get

@@ -11,8 +11,8 @@ import java.util.List;
 
 /**
  * In charge of detecting a mutant.
- * Iterates the dna sequence char by char, one time. Iterates it till the end to verify that the sequence
- * is valida.
+ * Iterates the dna sequence char by char, one time. Iterates till the end, to verify that the sequence
+ * is valid.
  * Future improvement: in case of validating the whole sequence was not necessary, have a property to stop
  * the iteration once a mutant was found.
  */

@@ -4,8 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 abstract class DiagonalDetector implements SequenceDetector {
+    // holds the count of matches for current row
     private Map<Integer, CharCount> diagonalMatchesCurrRow = new HashMap<>();
+
+    // holds the count of matches for previous row
     private Map<Integer, CharCount> diagonalMatchesPrevRow = new HashMap<>();
+
     private int mutantSequenceSize;
 
     public DiagonalDetector(int mutantSequenceSize){
@@ -22,7 +26,9 @@ abstract class DiagonalDetector implements SequenceDetector {
             diagonalCount = new CharCount(mutantSequenceSize);
         }
 
+        // puts the current char in the column being processed
         diagonalMatchesCurrRow.put(colIndex, diagonalCount);
+
         boolean sequenceDetected = CharCountProcessor.processCurrentChar(diagonalCount, currChar);
 
         if (colIndex == (rowSize-1)){

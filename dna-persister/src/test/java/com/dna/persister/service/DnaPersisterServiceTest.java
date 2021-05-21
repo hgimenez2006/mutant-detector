@@ -35,8 +35,8 @@ public class DnaPersisterServiceTest {
         //sqs with s3 message example:
         String s3Bucket = "sqs-dna";
         String s3Key = "8b79b963-244f-4056-910f-ad6c06bca726";
-        String sqsMessageBody = "\"software.amazon.payloadoffloading.PayloadS3Pointer\", " +
-                "{\"s3BucketName\":\"" + s3Bucket + "\",\"s3Key\":\"" + s3Key + "\"}]";
+        String sqsMessageBody = String.format("\"software.amazon.payloadoffloading.PayloadS3Pointer\", " +
+                "{\"s3BucketName\":\"%s\",\"s3Key\":\"%s\"}]", s3Bucket, s3Key);
 
         DnaResult dnaResult = DnaResult.builder().dna("AAAA").mutant(false).build();
         Mockito.when(s3Repository.getFileContent(s3Bucket, s3Key))

@@ -18,6 +18,9 @@ public class ExtendedSqsMessage {
     private ExtendedSqsMessage(){}
 
     public static ExtendedSqsMessage of(String msgBody){
+        // The extended sqs message format is:
+        // [software.amazon.payloadoffloading.PayloadS3Pointer, {"s3BucketName": "<bucketName>", "s3Key": "<key>"}]
+
         try {
             // excuse my french
             String s3MessageJson = msgBody.substring(msgBody.indexOf(S3_BUCKET_NAME) - 2, msgBody.length() - 1);
