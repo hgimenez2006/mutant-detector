@@ -68,8 +68,8 @@ requerimientos del cliente nos lo permitan.
  
 Vale aclarar que esta solución funciona sólo si la carga agresiva de tráfico se produce en el endpoint de análisis
 de adn. Si la carga también se produjera en el endpoint de estadísticas habría que desacoplar 
-*dna-stats* de mongoDB, ya sea utilizando una solución de caching con persistencia, como Redis, o empleando una base 
-de datos de alto poder de escalamiento, como DynamoDB, donde *dna-persister* almacenaría exclusivamente los totales.
+*dna-stats* de mongoDB, utilizando una solución de caching con persistencia, como Redis, donde *dna-persister* 
+almacenaría exclusivamente los totales.
 
 **Solución alternativa:**  
 
