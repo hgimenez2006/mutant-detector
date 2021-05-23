@@ -10,14 +10,15 @@ Solución: desacople de la solución en 3 módulos:
 - dna-analyer: encargado de analizar el adn
 - dna-persister: encargado de persistir el adn 
 - dna-stats: encargado de entregar las estadísticas  
-El uso de funciones lambda podría ser adecuado o no, dependiendo de qué tan a menudo se producen las variaciones de
+  
+El uso de funciones lambda podría ser adecuado o no, dependiendo qué tan a menudo se producen las variaciones de
 tráfico. Podría ser más económico usar EC2, teniendo la suficiente cantidad de instancias siempre activas para soportar 
 el pico de requests.  
 
 b) Tamaño de los datos (requerimiento supuesto):
 Tratándose de adn se buscó una implementación que permitiera lidiar con largas cadenas de texto. 
 Se eligió una db no-sql no sólo por el poder de escalamiento sino también por la mejor performance a la hora de realizar 
-búsquedas. Y particularmente MongoDB (en lugar de DynamoDB, por ejemplo) ya que mongo permite máximos de 16MB por 
+búsquedas. Y particularmente MongoDB (en lugar de DynamoDB) ya que mongo permite máximos de 16MB por 
 collection. Se utilizó el cliente extendido de Amazon sqs que permite enviar mensajes de hasta 2GB valiéndose de S3 
 como capa de persistencia intermedia.
 
