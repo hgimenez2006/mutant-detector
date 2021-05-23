@@ -10,7 +10,7 @@ Solución: desacople de la solución en 3 módulos:
 - dna-analyer: encargado de analizar el adn
 - dna-persister: encargado de persistir el adn 
 - dna-stats: encargado de entregar las estadísticas  
-El uso de funciones lambda podría se adecuado o no, dependiendo de qué tan a menudo se producen las variaciones de
+El uso de funciones lambda podría ser adecuado o no, dependiendo de qué tan a menudo se producen las variaciones de
 tráfico. Podría ser más económico usar EC2, teniendo la suficiente cantidad de instancias siempre activas para soportar 
 el pico de requests.  
 
@@ -67,7 +67,7 @@ requerimientos del cliente nos lo permitan.
  
 Vale aclarar que esta solución funciona sólo si la carga agresiva de tráfico se produce en el endpoint de análisis
 de adn. Si la carga también se produjera en el endpoint de estadísticas habría que desacoplar 
-*dna-stats* de mongoDB, ya sea utilizando una solución de caching con persistencia, como Redis, o empleando otra base 
+*dna-stats* de mongoDB, ya sea utilizando una solución de caching con persistencia, como Redis, o empleando una base 
 de datos de alto poder de escalamiento, como DynamoDB, donde *dna-persister* almacenaría exclusivamente los totales.
 
 **Solución alternativa:**  
